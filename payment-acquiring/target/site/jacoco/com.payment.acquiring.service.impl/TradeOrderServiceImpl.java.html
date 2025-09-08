@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TradeOrderServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Payment Acquiring Service</a> &gt; <a href="index.source.html" class="el_package">com.payment.acquiring.service.impl</a> &gt; <span class="el_source">TradeOrderServiceImpl.java</span></div><h1>TradeOrderServiceImpl.java</h1><pre class="source lang-java linenums">package com.payment.acquiring.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.payment.acquiring.dto.TradeOrderCreateRequest;
+import com.payment.acquiring.entity.TradeOrder;
+import com.payment.acquiring.mapper.TradeOrderMapper;
+import com.payment.acquiring.service.TradeOrderService;
+import com.payment.acquiring.domain.TradeOrderStatus;
+import com.payment.common.util.BusinessIdGenerator;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import com.payment.common.page.PageResponse;
+
+@Service
+<span class="fc" id="L21">public class TradeOrderServiceImpl implements TradeOrderService {</span>
+
+    @Resource
+    private TradeOrderMapper tradeOrderMapper;
+
+    @Resource
+    private BusinessIdGenerator businessIdGenerator;
+
+    @Override
+    public TradeOrder createOrder(TradeOrderCreateRequest request) {
+        // 幂等：同一商户+商户订单号，如果已存在且非终态，直接返回
+<span class="fc" id="L32">        TradeOrder existed = getByMerchantPair(request.getMerchantId(), request.getMerchantOrderNo());</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if (existed != null) {</span>
+<span class="fc" id="L34">            return existed;</span>
+        }
+<span class="fc" id="L36">        TradeOrder order = new TradeOrder();</span>
+<span class="fc" id="L37">        order.setTradeOrderNo(businessIdGenerator.generateTradeOrderNo());</span>
+<span class="fc" id="L38">        order.setMerchantId(request.getMerchantId());</span>
+<span class="fc" id="L39">        order.setMerchantOrderNo(request.getMerchantOrderNo());</span>
+<span class="fc" id="L40">        order.setUserId(request.getUserId());</span>
+<span class="fc" id="L41">        order.setAmount(request.getAmount());</span>
+<span class="fc" id="L42">        order.setCurrency(request.getCurrency());</span>
+<span class="fc" id="L43">        order.setSubject(request.getSubject());</span>
+<span class="fc" id="L44">        order.setBody(request.getBody());</span>
+<span class="fc" id="L45">        order.setStatus(TradeOrderStatus.INIT.getCode());</span>
+<span class="fc" id="L46">        order.setNotifyUrl(request.getNotifyUrl());</span>
+<span class="fc" id="L47">        order.setReturnUrl(request.getReturnUrl());</span>
+<span class="fc" id="L48">        order.setCreateTime(LocalDateTime.now());</span>
+<span class="fc" id="L49">        order.setUpdateTime(LocalDateTime.now());</span>
+<span class="fc" id="L50">        tradeOrderMapper.insert(order);</span>
+<span class="fc" id="L51">        return order;</span>
+    }
+
+    @Override
+    public TradeOrder getByTradeOrderNo(String tradeOrderNo) {
+<span class="fc" id="L56">        return tradeOrderMapper.selectOne(new LambdaQueryWrapper&lt;TradeOrder&gt;()</span>
+<span class="fc" id="L57">                .eq(TradeOrder::getTradeOrderNo, tradeOrderNo));</span>
+    }
+
+    @Override
+    public TradeOrder getByMerchantPair(String merchantId, String merchantOrderNo) {
+<span class="fc" id="L62">        return tradeOrderMapper.selectOne(new LambdaQueryWrapper&lt;TradeOrder&gt;()</span>
+<span class="fc" id="L63">                .eq(TradeOrder::getMerchantId, merchantId)</span>
+<span class="fc" id="L64">                .eq(TradeOrder::getMerchantOrderNo, merchantOrderNo));</span>
+    }
+
+    @Override
+    public boolean closeOrder(String tradeOrderNo) {
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        return tradeOrderMapper.update(null, new LambdaUpdateWrapper&lt;TradeOrder&gt;()</span>
+<span class="fc" id="L70">                .eq(TradeOrder::getTradeOrderNo, tradeOrderNo)</span>
+<span class="fc" id="L71">                .in(TradeOrder::getStatus, TradeOrderStatus.INIT.getCode(), TradeOrderStatus.PAYING.getCode())</span>
+<span class="fc" id="L72">                .set(TradeOrder::getStatus, TradeOrderStatus.CLOSED.getCode())</span>
+<span class="fc" id="L73">                .set(TradeOrder::getUpdateTime, LocalDateTime.now())) &gt; 0;</span>
+    }
+
+    @Override
+    public PageResponse&lt;TradeOrder&gt; pageByMerchant(String merchantId, int pageNum, int pageSize) {
+<span class="fc" id="L78">        int offset = Math.max(0, (pageNum - 1) * pageSize);</span>
+        // total
+<span class="fc" id="L80">        Integer total = tradeOrderMapper.selectCount(new LambdaQueryWrapper&lt;TradeOrder&gt;()</span>
+<span class="fc" id="L81">                .eq(TradeOrder::getMerchantId, merchantId)).intValue();</span>
+        // records
+<span class="fc" id="L83">        List&lt;TradeOrder&gt; records = tradeOrderMapper.selectList(new LambdaQueryWrapper&lt;TradeOrder&gt;()</span>
+<span class="fc" id="L84">                .eq(TradeOrder::getMerchantId, merchantId)</span>
+<span class="fc" id="L85">                .orderByDesc(TradeOrder::getCreateTime)</span>
+<span class="fc" id="L86">                .last(&quot;limit &quot; + offset + &quot;,&quot; + pageSize));</span>
+<span class="fc" id="L87">        return PageResponse.of(total, pageNum, pageSize, records);</span>
+    }
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

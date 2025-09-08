@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TradeOrderController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Payment Acquiring Service</a> &gt; <a href="index.source.html" class="el_package">com.payment.acquiring.controller</a> &gt; <span class="el_source">TradeOrderController.java</span></div><h1>TradeOrderController.java</h1><pre class="source lang-java linenums">package com.payment.acquiring.controller;
+
+import com.payment.acquiring.dto.TradeOrderCreateRequest;
+import com.payment.acquiring.entity.TradeOrder;
+import com.payment.acquiring.service.TradeOrderService;
+import com.payment.common.result.Result;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+
+@Api(tags = &quot;交易订单管理&quot;)
+@RestController
+@RequestMapping(&quot;/api/acquiring/order&quot;)
+<span class="fc" id="L20">public class TradeOrderController {</span>
+
+    @Resource
+    private TradeOrderService tradeOrderService;
+    @Resource
+    private MessageSource messageSource;
+
+    @ApiOperation(value = &quot;创建交易订单&quot;, notes = &quot;创建新的交易订单&quot;)
+    @PostMapping(&quot;/create&quot;)
+    public Result&lt;TradeOrder&gt; create(@ApiParam(value = &quot;交易订单创建请求&quot;, required = true) @Validated @RequestBody TradeOrderCreateRequest request) {
+<span class="fc" id="L30">        TradeOrder order = tradeOrderService.createOrder(request);</span>
+<span class="fc" id="L31">        return Result.success(order);</span>
+    }
+
+    @ApiOperation(value = &quot;根据交易单号获取订单&quot;, notes = &quot;通过交易单号获取订单详细信息&quot;)
+    @GetMapping(&quot;/{tradeOrderNo}&quot;)
+    public Result&lt;TradeOrder&gt; get(@ApiParam(value = &quot;交易单号&quot;, required = true) @PathVariable String tradeOrderNo) {
+<span class="fc" id="L37">        TradeOrder order = tradeOrderService.getByTradeOrderNo(tradeOrderNo);</span>
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (order == null) {</span>
+<span class="fc" id="L39">            return Result.businessError(messageSource.getMessage(&quot;order.not.exist&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+<span class="nc" id="L41">        return Result.success(order);</span>
+    }
+
+    @ApiOperation(value = &quot;根据商户信息获取订单&quot;, notes = &quot;通过商户ID和商户订单号获取订单&quot;)
+    @GetMapping(&quot;/merchant&quot;)
+    public Result&lt;TradeOrder&gt; getByMerchant(@ApiParam(value = &quot;商户ID&quot;, required = true) @RequestParam String merchantId,
+                                            @ApiParam(value = &quot;商户订单号&quot;, required = true) @RequestParam String merchantOrderNo) {
+<span class="nc" id="L48">        TradeOrder order = tradeOrderService.getByMerchantPair(merchantId, merchantOrderNo);</span>
+<span class="nc" id="L49">        return Result.success(order);</span>
+    }
+
+    @ApiOperation(value = &quot;关闭交易订单&quot;, notes = &quot;关闭指定交易订单&quot;)
+    @PostMapping(&quot;/{tradeOrderNo}/close&quot;)
+    public Result&lt;Boolean&gt; close(@ApiParam(value = &quot;交易单号&quot;, required = true) @PathVariable String tradeOrderNo) {
+<span class="nc" id="L55">        boolean ok = tradeOrderService.closeOrder(tradeOrderNo);</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (!ok) {</span>
+<span class="nc" id="L57">            return Result.businessError(messageSource.getMessage(&quot;order.status.invalid&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+<span class="nc" id="L59">        return Result.success(ok);</span>
+    }
+
+    @ApiOperation(value = &quot;分页查询商户订单&quot;, notes = &quot;分页获取指定商户的订单列表&quot;)
+    @GetMapping(&quot;/page/merchant&quot;)
+    public Result&lt;?&gt; pageByMerchant(@ApiParam(value = &quot;商户ID&quot;, required = true) @RequestParam String merchantId,
+                                    @ApiParam(value = &quot;页码&quot;, required = true) @RequestParam int pageNum,
+                                    @ApiParam(value = &quot;每页大小&quot;, required = true) @RequestParam int pageSize) {
+<span class="nc" id="L67">        return Result.success(tradeOrderService.pageByMerchant(merchantId, pageNum, pageSize));</span>
+    }
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

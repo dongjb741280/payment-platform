@@ -1,0 +1,10 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Payment Account Service,com.payment.account.dto,AccountResponse,371,109,94,0,0,12,50,24,3,24
+Payment Account Service,com.payment.account.dto,AccountCreateRequest,158,37,38,0,0,5,23,9,4,9
+Payment Account Service,com.payment.account.dto,BalanceOperationRequest,154,42,38,0,0,5,22,10,3,10
+Payment Account Service,com.payment.account.service.impl,AccountServiceImpl,152,645,11,17,19,150,13,19,2,16
+Payment Account Service,com.payment.account,PaymentAccountApplication,5,3,0,0,2,1,1,1,1,1
+Payment Account Service,com.payment.account.controller,AccountController,82,161,0,0,24,38,1,11,1,11
+Payment Account Service,com.payment.account.entity,Account,364,73,86,0,1,11,47,21,4,21
+Payment Account Service,com.payment.account.entity,AccountBalance,334,66,78,0,1,10,43,19,4,19
+Payment Account Service,com.payment.account.entity,AccountFlow,366,73,86,0,1,11,47,21,4,21

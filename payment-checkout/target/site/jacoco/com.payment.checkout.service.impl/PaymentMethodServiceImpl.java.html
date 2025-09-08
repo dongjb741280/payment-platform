@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaymentMethodServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Payment Checkout Service</a> &gt; <a href="index.source.html" class="el_package">com.payment.checkout.service.impl</a> &gt; <span class="el_source">PaymentMethodServiceImpl.java</span></div><h1>PaymentMethodServiceImpl.java</h1><pre class="source lang-java linenums">package com.payment.checkout.service.impl;
+
+import com.payment.checkout.dto.PaymentMethodDTO;
+import com.payment.checkout.service.PaymentMethodService;
+import com.payment.common.constant.CommonConstants;
+import org.springframework.stereotype.Service;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+@Service
+<span class="fc" id="L16">@RequiredArgsConstructor</span>
+public class PaymentMethodServiceImpl implements PaymentMethodService {
+    
+    private final MessageSource messageSource;
+    @Override
+    public List&lt;PaymentMethodDTO&gt; consult(String tradeOrderNo) {
+        // 简化演示：静态方法列表 + 排序
+<span class="fc" id="L23">        List&lt;PaymentMethodDTO&gt; list = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L24">        list.add(new PaymentMethodDTO(CommonConstants.PAYMENT_METHOD_BALANCE, messageSource.getMessage(&quot;payment.method.balance&quot;, null, LocaleContextHolder.getLocale()), 10, true));</span>
+<span class="fc" id="L25">        list.add(new PaymentMethodDTO(CommonConstants.PAYMENT_METHOD_WECHAT, messageSource.getMessage(&quot;payment.method.wechat&quot;, null, LocaleContextHolder.getLocale()), 20, true));</span>
+<span class="fc" id="L26">        list.add(new PaymentMethodDTO(CommonConstants.PAYMENT_METHOD_ALIPAY, messageSource.getMessage(&quot;payment.method.alipay&quot;, null, LocaleContextHolder.getLocale()), 30, true));</span>
+<span class="fc" id="L27">        list.add(new PaymentMethodDTO(CommonConstants.PAYMENT_METHOD_UNIONPAY, messageSource.getMessage(&quot;payment.method.unionpay&quot;, null, LocaleContextHolder.getLocale()), 40, false));</span>
+<span class="fc" id="L28">        list.sort(Comparator.comparingInt(PaymentMethodDTO::getSort));</span>
+<span class="fc" id="L29">        return list;</span>
+    }
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

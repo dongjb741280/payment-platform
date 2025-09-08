@@ -1,0 +1,467 @@
+2025-09-08 13:19:35.205 [main] INFO  c.p.user.UserServiceIntegrationTest - Starting UserServiceIntegrationTest using Java 23.0.2 on dongjbdeMacBook-Pro.local with PID 61847 (started by dongjb in /Users/dongjb/IdeaProjects/lean/pay/phase1/payment-platform/payment-user)
+2025-09-08 13:19:35.206 [main] DEBUG c.p.user.UserServiceIntegrationTest - Running with Spring Boot v2.7.18, Spring v5.3.31
+2025-09-08 13:19:35.206 [main] INFO  c.p.user.UserServiceIntegrationTest - The following 1 profile is active: "dev"
+2025-09-08 13:19:35.225 [main] DEBUG o.s.w.c.s.GenericWebApplicationContext - Refreshing org.springframework.web.context.support.GenericWebApplicationContext@45d4421d
+2025-09-08 13:19:35.764 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-08 13:19:35.766 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-09-08 13:19:35.780 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 4 ms. Found 0 Redis repository interfaces.
+2025-09-08 13:19:36.216 [main] INFO  c.a.d.s.b.a.DruidDataSourceAutoConfigure - Init DruidDataSource
+2025-09-08 13:19:36.769 [main] INFO  c.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+2025-09-08 13:19:37.122 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - 21 mappings in 'requestMappingHandlerMapping'
+2025-09-08 13:19:37.290 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 2 ResponseBodyAdvice
+2025-09-08 13:19:37.317 [main] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/swagger-ui/] in 'viewControllerHandlerMapping'
+2025-09-08 13:19:37.327 [main] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**, /swagger-ui/**] in 'resourceHandlerMapping'
+2025-09-08 13:19:37.332 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 1 @ExceptionHandler, 2 ResponseBodyAdvice
+2025-09-08 13:19:37.605 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-09-08 13:19:37.605 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-09-08 13:19:37.605 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2025-09-08 13:19:37.773 [main] INFO  c.p.user.UserServiceIntegrationTest - Started UserServiceIntegrationTest in 2.864 seconds (JVM running for 3.648)
+2025-09-08 13:19:38.180 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.211 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_7b59783c, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.259 [main] INFO  c.p.user.controller.UserController - User register request: it_7b59783c
+2025-09-08 13:19:38.260 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_7b59783c
+2025-09-08 13:19:38.308 [main] WARN  c.b.m.c.t.support.ReflectLambdaMeta - Unable to make field private final java.lang.Class java.lang.invoke.SerializedLambda.capturingClass accessible: module java.base does not "opens java.lang.invoke" to unnamed module @4e5ed836
+2025-09-08 13:19:38.332 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.375 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_7b59783c(String)
+2025-09-08 13:19:38.390 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.392 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.393 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778164(String)
+2025-09-08 13:19:38.395 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.396 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.397 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_7b59783c@example.com(String)
+2025-09-08 13:19:38.398 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.400 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.474 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: d0d7140499fa4d75bdb75c28b4a9362e(String), it_7b59783c(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778164(String), it_7b59783c@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.398930(LocalDateTime), 2025-09-08T13:19:38.398942(LocalDateTime)
+2025-09-08 13:19:38.496 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.497 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：d0d7140499fa4d75bdb75c28b4a9362e
+2025-09-08 13:19:38.508 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.510 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=d0d7140499fa4d75bdb75c28b4a9362e, username= (truncated)...]
+2025-09-08 13:19:38.522 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#deleteUser(String)
+2025-09-08 13:19:38.526 [main] INFO  c.p.u.service.impl.UserServiceImpl - 删除用户，用户ID：d0d7140499fa4d75bdb75c28b4a9362e
+2025-09-08 13:19:38.528 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,user_id,username,password,salt,real_name,id_card,phone,email,status,create_time,update_time,deleted FROM t_user WHERE deleted=0 AND (user_id = ?)
+2025-09-08 13:19:38.529 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==> Parameters: d0d7140499fa4d75bdb75c28b4a9362e(String)
+2025-09-08 13:19:38.533 [main] DEBUG c.p.u.mapper.UserMapper.selectList - <==      Total: 1
+2025-09-08 13:19:38.536 [main] DEBUG c.p.u.mapper.UserMapper.deleteById - ==>  Preparing: UPDATE t_user SET deleted=1 WHERE id=? AND deleted=0
+2025-09-08 13:19:38.538 [main] DEBUG c.p.u.mapper.UserMapper.deleteById - ==> Parameters: 520(Long)
+2025-09-08 13:19:38.542 [main] DEBUG c.p.u.mapper.UserMapper.deleteById - <==    Updates: 1
+2025-09-08 13:19:38.542 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户删除结果：成功
+2025-09-08 13:19:38.543 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.543 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=删除成功, data=true, requestId=313504312f8a46c1acc566c24f0a96dc, timestamp=175 (truncated)...]
+2025-09-08 13:19:38.551 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#getUserByUsername(String)
+2025-09-08 13:19:38.552 [main] INFO  c.p.u.service.impl.UserServiceImpl - 根据用户名查询用户：u_cd0a9050f09b47b29dcf8d1cfffbbec4
+2025-09-08 13:19:38.553 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,user_id,username,password,salt,real_name,id_card,phone,email,status,create_time,update_time,deleted FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.554 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==> Parameters: u_cd0a9050f09b47b29dcf8d1cfffbbec4(String)
+2025-09-08 13:19:38.556 [main] DEBUG c.p.u.mapper.UserMapper.selectList - <==      Total: 0
+2025-09-08 13:19:38.557 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.payment.common.exception.GlobalExceptionHandler#handleException(Exception)
+2025-09-08 13:19:38.559 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.559 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [Result(code=5000, message=系统错误, data=null, requestId=30ab27d1df694fed8084f03c758c5acf, timestamp=175 (truncated)...]
+2025-09-08 13:19:38.559 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: 用户不存在]
+2025-09-08 13:19:38.566 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.570 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_67c536b1, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.570 [main] INFO  c.p.user.controller.UserController - User register request: it_67c536b1
+2025-09-08 13:19:38.571 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_67c536b1
+2025-09-08 13:19:38.571 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.572 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_67c536b1(String)
+2025-09-08 13:19:38.572 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.573 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.573 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778566(String)
+2025-09-08 13:19:38.574 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.575 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.575 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_67c536b1@example.com(String)
+2025-09-08 13:19:38.576 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.576 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.577 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: 7ef72db9a62f438e8af64a40e04aa860(String), it_67c536b1(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778566(String), it_67c536b1@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.576452(LocalDateTime), 2025-09-08T13:19:38.576461(LocalDateTime)
+2025-09-08 13:19:38.578 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.578 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：7ef72db9a62f438e8af64a40e04aa860
+2025-09-08 13:19:38.578 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.579 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=7ef72db9a62f438e8af64a40e04aa860, username= (truncated)...]
+2025-09-08 13:19:38.580 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#getUserPage(int, int)
+2025-09-08 13:19:38.581 [main] INFO  c.p.u.service.impl.UserServiceImpl - 分页查询用户，页码：1，页大小：5
+2025-09-08 13:19:38.582 [main] DEBUG c.p.u.mapper.UserMapper.selectPage - ==>  Preparing: SELECT id,user_id,username,password,salt,real_name,id_card,phone,email,status,create_time,update_time,deleted FROM t_user WHERE deleted=0
+2025-09-08 13:19:38.583 [main] DEBUG c.p.u.mapper.UserMapper.selectPage - ==> Parameters: 
+2025-09-08 13:19:38.619 [main] DEBUG c.p.u.mapper.UserMapper.selectPage - <==      Total: 487
+2025-09-08 13:19:38.629 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.630 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=操作成功, data=com.baomidou.mybatisplus.extension.plugins.pagination.Page@467a (truncated)...]
+2025-09-08 13:19:38.651 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.651 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_7c0deff1, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.652 [main] INFO  c.p.user.controller.UserController - User register request: it_7c0deff1
+2025-09-08 13:19:38.652 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_7c0deff1
+2025-09-08 13:19:38.653 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.653 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_7c0deff1(String)
+2025-09-08 13:19:38.654 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.655 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.655 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778650(String)
+2025-09-08 13:19:38.655 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.656 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.656 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_7c0deff1@example.com(String)
+2025-09-08 13:19:38.657 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.657 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.657 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: d3244ffa06804e088db2523849ed4374(String), it_7c0deff1(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778650(String), it_7c0deff1@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.657436(LocalDateTime), 2025-09-08T13:19:38.657445(LocalDateTime)
+2025-09-08 13:19:38.658 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.659 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：d3244ffa06804e088db2523849ed4374
+2025-09-08 13:19:38.659 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.659 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=d3244ffa06804e088db2523849ed4374, username= (truncated)...]
+2025-09-08 13:19:38.660 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#checkPhone(String)
+2025-09-08 13:19:38.661 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.661 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778650(String)
+2025-09-08 13:19:38.662 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.662 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.662 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=操作成功, data=true, requestId=eaecf36e9c50440abc6c1d1e972df75d, timestamp=175 (truncated)...]
+2025-09-08 13:19:38.665 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.665 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_8bcf271f, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.666 [main] INFO  c.p.user.controller.UserController - User register request: it_8bcf271f
+2025-09-08 13:19:38.666 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_8bcf271f
+2025-09-08 13:19:38.666 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.666 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_8bcf271f(String)
+2025-09-08 13:19:38.667 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.668 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.668 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778665(String)
+2025-09-08 13:19:38.668 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.669 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.669 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_8bcf271f@example.com(String)
+2025-09-08 13:19:38.669 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.670 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.670 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: e04def06e3c949f98be79ee998d2efad(String), it_8bcf271f(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778665(String), it_8bcf271f@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.669922(LocalDateTime), 2025-09-08T13:19:38.669928(LocalDateTime)
+2025-09-08 13:19:38.671 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.671 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：e04def06e3c949f98be79ee998d2efad
+2025-09-08 13:19:38.671 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.671 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=e04def06e3c949f98be79ee998d2efad, username= (truncated)...]
+2025-09-08 13:19:38.672 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#freezeUser(String)
+2025-09-08 13:19:38.673 [main] INFO  c.p.u.service.impl.UserServiceImpl - 冻结用户，用户ID：e04def06e3c949f98be79ee998d2efad
+2025-09-08 13:19:38.673 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,user_id,username,password,salt,real_name,id_card,phone,email,status,create_time,update_time,deleted FROM t_user WHERE deleted=0 AND (user_id = ?)
+2025-09-08 13:19:38.673 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==> Parameters: e04def06e3c949f98be79ee998d2efad(String)
+2025-09-08 13:19:38.674 [main] DEBUG c.p.u.mapper.UserMapper.selectList - <==      Total: 1
+2025-09-08 13:19:38.676 [main] DEBUG c.p.u.mapper.UserMapper.updateById - ==>  Preparing: UPDATE t_user SET user_id=?, username=?, password=?, salt=?, phone=?, email=?, status=?, create_time=?, update_time=? WHERE id=? AND deleted=0
+2025-09-08 13:19:38.677 [main] DEBUG c.p.u.mapper.UserMapper.updateById - ==> Parameters: e04def06e3c949f98be79ee998d2efad(String), it_8bcf271f(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778665(String), it_8bcf271f@example.com(String), FROZEN(String), 2025-09-08T13:19:39(LocalDateTime), 2025-09-08T13:19:38.674934(LocalDateTime), 523(Long)
+2025-09-08 13:19:38.678 [main] DEBUG c.p.u.mapper.UserMapper.updateById - <==    Updates: 1
+2025-09-08 13:19:38.678 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户冻结结果：成功
+2025-09-08 13:19:38.678 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.678 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=冻结成功, data=true, requestId=cf44d79fe609451facc749ea7c2e4aba, timestamp=175 (truncated)...]
+2025-09-08 13:19:38.681 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.681 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_1ec835ce, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.682 [main] INFO  c.p.user.controller.UserController - User register request: it_1ec835ce
+2025-09-08 13:19:38.682 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_1ec835ce
+2025-09-08 13:19:38.682 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.682 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_1ec835ce(String)
+2025-09-08 13:19:38.683 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.683 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.683 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778681(String)
+2025-09-08 13:19:38.684 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.684 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.684 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_1ec835ce@example.com(String)
+2025-09-08 13:19:38.685 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.685 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.685 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: 5ece311353ec46879622b630df96843f(String), it_1ec835ce(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778681(String), it_1ec835ce@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.685556(LocalDateTime), 2025-09-08T13:19:38.685561(LocalDateTime)
+2025-09-08 13:19:38.686 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.687 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：5ece311353ec46879622b630df96843f
+2025-09-08 13:19:38.687 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.687 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=5ece311353ec46879622b630df96843f, username= (truncated)...]
+2025-09-08 13:19:38.688 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#checkEmail(String)
+2025-09-08 13:19:38.688 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.689 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_1ec835ce@example.com(String)
+2025-09-08 13:19:38.689 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.689 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.689 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=操作成功, data=true, requestId=c45bd6587c294215b4fb3ad70b78f7e5, timestamp=175 (truncated)...]
+2025-09-08 13:19:38.698 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.698 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_8a39847d, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.698 [main] INFO  c.p.user.controller.UserController - User register request: it_8a39847d
+2025-09-08 13:19:38.698 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_8a39847d
+2025-09-08 13:19:38.699 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.699 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_8a39847d(String)
+2025-09-08 13:19:38.700 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.703 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.703 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778697(String)
+2025-09-08 13:19:38.704 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.705 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.705 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_8a39847d@example.com(String)
+2025-09-08 13:19:38.705 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.706 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.706 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: b67fae18e64643f98d8abe9e7157c2ec(String), it_8a39847d(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778697(String), it_8a39847d@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.705936(LocalDateTime), 2025-09-08T13:19:38.705945(LocalDateTime)
+2025-09-08 13:19:38.707 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.707 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：b67fae18e64643f98d8abe9e7157c2ec
+2025-09-08 13:19:38.707 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.707 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=b67fae18e64643f98d8abe9e7157c2ec, username= (truncated)...]
+2025-09-08 13:19:38.708 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#checkUsername(String)
+2025-09-08 13:19:38.709 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.710 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_8a39847d(String)
+2025-09-08 13:19:38.710 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.711 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.711 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=操作成功, data=true, requestId=7e0636e991dc414d91e70be6fb689ad6, timestamp=175 (truncated)...]
+2025-09-08 13:19:38.715 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.715 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_aab13565, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.716 [main] INFO  c.p.user.controller.UserController - User register request: it_aab13565
+2025-09-08 13:19:38.716 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_aab13565
+2025-09-08 13:19:38.716 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.716 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_aab13565(String)
+2025-09-08 13:19:38.717 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.718 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.718 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778714(String)
+2025-09-08 13:19:38.719 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.720 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.720 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_aab13565@example.com(String)
+2025-09-08 13:19:38.721 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.721 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.721 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: 839e107f29944ed585e1b85d8b35e082(String), it_aab13565(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778714(String), it_aab13565@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.721194(LocalDateTime), 2025-09-08T13:19:38.721203(LocalDateTime)
+2025-09-08 13:19:38.722 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.722 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：839e107f29944ed585e1b85d8b35e082
+2025-09-08 13:19:38.723 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.723 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=839e107f29944ed585e1b85d8b35e082, username= (truncated)...]
+2025-09-08 13:19:38.724 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#getUserByPhone(String)
+2025-09-08 13:19:38.724 [main] INFO  c.p.u.service.impl.UserServiceImpl - 根据手机号查询用户：13808778714
+2025-09-08 13:19:38.725 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,user_id,username,password,salt,real_name,id_card,phone,email,status,create_time,update_time,deleted FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.726 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==> Parameters: 13808778714(String)
+2025-09-08 13:19:38.727 [main] DEBUG c.p.u.mapper.UserMapper.selectList - <==      Total: 1
+2025-09-08 13:19:38.727 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.727 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=操作成功, data=UserResponse(userId=839e107f29944ed585e1b85d8b35e082, username= (truncated)...]
+2025-09-08 13:19:38.730 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.730 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_5d10954f, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.731 [main] INFO  c.p.user.controller.UserController - User register request: it_5d10954f
+2025-09-08 13:19:38.731 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_5d10954f
+2025-09-08 13:19:38.732 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.732 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_5d10954f(String)
+2025-09-08 13:19:38.733 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.733 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.733 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778730(String)
+2025-09-08 13:19:38.734 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.734 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.734 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_5d10954f@example.com(String)
+2025-09-08 13:19:38.735 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.735 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.735 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: 87c06520b26743778055bcaf483c40d2(String), it_5d10954f(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778730(String), it_5d10954f@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.735296(LocalDateTime), 2025-09-08T13:19:38.735304(LocalDateTime)
+2025-09-08 13:19:38.736 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.736 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：87c06520b26743778055bcaf483c40d2
+2025-09-08 13:19:38.737 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.737 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=87c06520b26743778055bcaf483c40d2, username= (truncated)...]
+2025-09-08 13:19:38.737 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#getUserByEmail(String)
+2025-09-08 13:19:38.738 [main] INFO  c.p.u.service.impl.UserServiceImpl - 根据邮箱查询用户：it_5d10954f@example.com
+2025-09-08 13:19:38.739 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,user_id,username,password,salt,real_name,id_card,phone,email,status,create_time,update_time,deleted FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.739 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==> Parameters: it_5d10954f@example.com(String)
+2025-09-08 13:19:38.740 [main] DEBUG c.p.u.mapper.UserMapper.selectList - <==      Total: 1
+2025-09-08 13:19:38.741 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.741 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=操作成功, data=UserResponse(userId=87c06520b26743778055bcaf483c40d2, username= (truncated)...]
+2025-09-08 13:19:38.744 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.744 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_2ff705f3, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.745 [main] INFO  c.p.user.controller.UserController - User register request: it_2ff705f3
+2025-09-08 13:19:38.745 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_2ff705f3
+2025-09-08 13:19:38.746 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.746 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_2ff705f3(String)
+2025-09-08 13:19:38.746 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.747 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.747 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778744(String)
+2025-09-08 13:19:38.748 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.748 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.748 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_2ff705f3@example.com(String)
+2025-09-08 13:19:38.748 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.749 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.749 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: b53a03f04679422fab740b139291ce9b(String), it_2ff705f3(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778744(String), it_2ff705f3@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.749249(LocalDateTime), 2025-09-08T13:19:38.749258(LocalDateTime)
+2025-09-08 13:19:38.750 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.750 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：b53a03f04679422fab740b139291ce9b
+2025-09-08 13:19:38.751 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.751 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=b53a03f04679422fab740b139291ce9b, username= (truncated)...]
+2025-09-08 13:19:38.752 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#changePassword(String, String, String)
+2025-09-08 13:19:38.753 [main] INFO  c.p.u.service.impl.UserServiceImpl - 修改密码，用户ID：b53a03f04679422fab740b139291ce9b
+2025-09-08 13:19:38.753 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,user_id,username,password,salt,real_name,id_card,phone,email,status,create_time,update_time,deleted FROM t_user WHERE deleted=0 AND (user_id = ?)
+2025-09-08 13:19:38.754 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==> Parameters: b53a03f04679422fab740b139291ce9b(String)
+2025-09-08 13:19:38.754 [main] DEBUG c.p.u.mapper.UserMapper.selectList - <==      Total: 1
+2025-09-08 13:19:38.755 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.payment.common.exception.GlobalExceptionHandler#handleException(Exception)
+2025-09-08 13:19:38.755 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.755 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [Result(code=5000, message=系统错误, data=null, requestId=fef5f88c925e400695c19a7f57cb7a4b, timestamp=175 (truncated)...]
+2025-09-08 13:19:38.755 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: 旧密码不正确]
+2025-09-08 13:19:38.758 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.758 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_138cf136, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.759 [main] INFO  c.p.user.controller.UserController - User register request: it_138cf136
+2025-09-08 13:19:38.759 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_138cf136
+2025-09-08 13:19:38.759 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.760 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_138cf136(String)
+2025-09-08 13:19:38.760 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.761 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.761 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778758(String)
+2025-09-08 13:19:38.762 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.762 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.762 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_138cf136@example.com(String)
+2025-09-08 13:19:38.763 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.763 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.763 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: 0a605829bb1243d1ae85963ac7a21c58(String), it_138cf136(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778758(String), it_138cf136@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.763560(LocalDateTime), 2025-09-08T13:19:38.763568(LocalDateTime)
+2025-09-08 13:19:38.765 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.765 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：0a605829bb1243d1ae85963ac7a21c58
+2025-09-08 13:19:38.765 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.765 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=0a605829bb1243d1ae85963ac7a21c58, username= (truncated)...]
+2025-09-08 13:19:38.766 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.766 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_138cf136, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.767 [main] INFO  c.p.user.controller.UserController - User register request: it_138cf136
+2025-09-08 13:19:38.767 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_138cf136
+2025-09-08 13:19:38.767 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.767 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_138cf136(String)
+2025-09-08 13:19:38.768 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.768 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.payment.common.exception.GlobalExceptionHandler#handleException(Exception)
+2025-09-08 13:19:38.768 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.768 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [Result(code=5000, message=系统错误, data=null, requestId=93a46e709bae4b97b1916304f4fb8003, timestamp=175 (truncated)...]
+2025-09-08 13:19:38.768 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: 用户名已存在]
+2025-09-08 13:19:38.772 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.772 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_db01a301, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.773 [main] INFO  c.p.user.controller.UserController - User register request: it_db01a301
+2025-09-08 13:19:38.773 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_db01a301
+2025-09-08 13:19:38.773 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.774 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_db01a301(String)
+2025-09-08 13:19:38.774 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.775 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.775 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778771(String)
+2025-09-08 13:19:38.775 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.776 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.776 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_db01a301@example.com(String)
+2025-09-08 13:19:38.776 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.776 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.776 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: f3136bbf24984b20a76ad0343e5ab553(String), it_db01a301(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778771(String), it_db01a301@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.776542(LocalDateTime), 2025-09-08T13:19:38.776550(LocalDateTime)
+2025-09-08 13:19:38.788 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.789 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：f3136bbf24984b20a76ad0343e5ab553
+2025-09-08 13:19:38.789 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.789 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=f3136bbf24984b20a76ad0343e5ab553, username= (truncated)...]
+2025-09-08 13:19:38.790 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#changePassword(String, String, String)
+2025-09-08 13:19:38.791 [main] INFO  c.p.u.service.impl.UserServiceImpl - 修改密码，用户ID：f3136bbf24984b20a76ad0343e5ab553
+2025-09-08 13:19:38.791 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,user_id,username,password,salt,real_name,id_card,phone,email,status,create_time,update_time,deleted FROM t_user WHERE deleted=0 AND (user_id = ?)
+2025-09-08 13:19:38.792 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==> Parameters: f3136bbf24984b20a76ad0343e5ab553(String)
+2025-09-08 13:19:38.793 [main] DEBUG c.p.u.mapper.UserMapper.selectList - <==      Total: 1
+2025-09-08 13:19:38.794 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,user_id,username,password,salt,real_name,id_card,phone,email,status,create_time,update_time,deleted FROM t_user WHERE deleted=0 AND (user_id = ?)
+2025-09-08 13:19:38.794 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==> Parameters: f3136bbf24984b20a76ad0343e5ab553(String)
+2025-09-08 13:19:38.795 [main] DEBUG c.p.u.mapper.UserMapper.selectList - <==      Total: 1
+2025-09-08 13:19:38.795 [main] DEBUG c.p.u.mapper.UserMapper.updateById - ==>  Preparing: UPDATE t_user SET user_id=?, username=?, password=?, salt=?, phone=?, email=?, status=?, create_time=?, update_time=? WHERE id=? AND deleted=0
+2025-09-08 13:19:38.795 [main] DEBUG c.p.u.mapper.UserMapper.updateById - ==> Parameters: f3136bbf24984b20a76ad0343e5ab553(String), it_db01a301(String), c33367701511b4f6020ec61ded352059(String), default_salt(String), 13808778771(String), it_db01a301@example.com(String), ACTIVE(String), 2025-09-08T13:19:39(LocalDateTime), 2025-09-08T13:19:38.795383(LocalDateTime), 530(Long)
+2025-09-08 13:19:38.796 [main] DEBUG c.p.u.mapper.UserMapper.updateById - <==    Updates: 1
+2025-09-08 13:19:38.796 [main] INFO  c.p.u.service.impl.UserServiceImpl - 密码修改结果：成功
+2025-09-08 13:19:38.797 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.797 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=密码修改成功, data=true, requestId=e6b7caa9dade43dcb9baf90f63209c59, timestamp=1 (truncated)...]
+2025-09-08 13:19:38.800 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.801 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_4dadd5a6, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.801 [main] INFO  c.p.user.controller.UserController - User register request: it_4dadd5a6
+2025-09-08 13:19:38.801 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_4dadd5a6
+2025-09-08 13:19:38.802 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.802 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_4dadd5a6(String)
+2025-09-08 13:19:38.803 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.803 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.803 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778800(String)
+2025-09-08 13:19:38.804 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.805 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.805 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_4dadd5a6@example.com(String)
+2025-09-08 13:19:38.805 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.805 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.805 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: 0ec841573ad945498415bba34318b904(String), it_4dadd5a6(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778800(String), it_4dadd5a6@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.805688(LocalDateTime), 2025-09-08T13:19:38.805696(LocalDateTime)
+2025-09-08 13:19:38.807 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.807 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：0ec841573ad945498415bba34318b904
+2025-09-08 13:19:38.807 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.807 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=0ec841573ad945498415bba34318b904, username= (truncated)...]
+2025-09-08 13:19:38.808 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#updateUser(String, UserRegisterRequest)
+2025-09-08 13:19:38.809 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_4dadd5a6, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.810 [main] INFO  c.p.u.service.impl.UserServiceImpl - 更新用户信息，用户ID：0ec841573ad945498415bba34318b904
+2025-09-08 13:19:38.810 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,user_id,username,password,salt,real_name,id_card,phone,email,status,create_time,update_time,deleted FROM t_user WHERE deleted=0 AND (user_id = ?)
+2025-09-08 13:19:38.810 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==> Parameters: 0ec841573ad945498415bba34318b904(String)
+2025-09-08 13:19:38.811 [main] DEBUG c.p.u.mapper.UserMapper.selectList - <==      Total: 1
+2025-09-08 13:19:38.812 [main] DEBUG c.p.u.mapper.UserMapper.updateById - ==>  Preparing: UPDATE t_user SET user_id=?, username=?, password=?, salt=?, phone=?, email=?, status=?, create_time=?, update_time=? WHERE id=? AND deleted=0
+2025-09-08 13:19:38.812 [main] DEBUG c.p.u.mapper.UserMapper.updateById - ==> Parameters: 0ec841573ad945498415bba34318b904(String), it_4dadd5a6(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778800(String), it_4dadd5a6@example.com(String), ACTIVE(String), 2025-09-08T13:19:39(LocalDateTime), 2025-09-08T13:19:38.812093(LocalDateTime), 531(Long)
+2025-09-08 13:19:38.813 [main] DEBUG c.p.u.mapper.UserMapper.updateById - <==    Updates: 1
+2025-09-08 13:19:38.813 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户信息更新成功，用户ID：0ec841573ad945498415bba34318b904
+2025-09-08 13:19:38.813 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.813 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=更新成功, data=UserResponse(userId=0ec841573ad945498415bba34318b904, username= (truncated)...]
+2025-09-08 13:19:38.816 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.816 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_7e11bd66, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.816 [main] INFO  c.p.user.controller.UserController - User register request: it_7e11bd66
+2025-09-08 13:19:38.816 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_7e11bd66
+2025-09-08 13:19:38.817 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.817 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_7e11bd66(String)
+2025-09-08 13:19:38.818 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.818 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.818 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778815(String)
+2025-09-08 13:19:38.818 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.819 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.819 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_7e11bd66@example.com(String)
+2025-09-08 13:19:38.819 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.820 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.820 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: 838504be881d4fe0b5077a3fae85b73c(String), it_7e11bd66(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778815(String), it_7e11bd66@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.820040(LocalDateTime), 2025-09-08T13:19:38.820055(LocalDateTime)
+2025-09-08 13:19:38.821 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.821 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：838504be881d4fe0b5077a3fae85b73c
+2025-09-08 13:19:38.821 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.821 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=838504be881d4fe0b5077a3fae85b73c, username= (truncated)...]
+2025-09-08 13:19:38.824 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.824 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_b9c7efa9, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.824 [main] INFO  c.p.user.controller.UserController - User register request: it_b9c7efa9
+2025-09-08 13:19:38.824 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_b9c7efa9
+2025-09-08 13:19:38.825 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.825 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_b9c7efa9(String)
+2025-09-08 13:19:38.825 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.826 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.826 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778823(String)
+2025-09-08 13:19:38.826 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.827 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.827 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_b9c7efa9@example.com(String)
+2025-09-08 13:19:38.827 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.827 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.827 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: b64372e201014df585ded0f6aa748ed9(String), it_b9c7efa9(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778823(String), it_b9c7efa9@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.827695(LocalDateTime), 2025-09-08T13:19:38.827700(LocalDateTime)
+2025-09-08 13:19:38.828 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.829 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：b64372e201014df585ded0f6aa748ed9
+2025-09-08 13:19:38.829 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.829 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=b64372e201014df585ded0f6aa748ed9, username= (truncated)...]
+2025-09-08 13:19:38.830 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#getUserByUsername(String)
+2025-09-08 13:19:38.830 [main] INFO  c.p.u.service.impl.UserServiceImpl - 根据用户名查询用户：it_b9c7efa9
+2025-09-08 13:19:38.830 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,user_id,username,password,salt,real_name,id_card,phone,email,status,create_time,update_time,deleted FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.830 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==> Parameters: it_b9c7efa9(String)
+2025-09-08 13:19:38.831 [main] DEBUG c.p.u.mapper.UserMapper.selectList - <==      Total: 1
+2025-09-08 13:19:38.831 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.831 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=操作成功, data=UserResponse(userId=b64372e201014df585ded0f6aa748ed9, username= (truncated)...]
+2025-09-08 13:19:38.833 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.834 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_634273a7, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.834 [main] INFO  c.p.user.controller.UserController - User register request: it_634273a7
+2025-09-08 13:19:38.834 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_634273a7
+2025-09-08 13:19:38.834 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.835 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_634273a7(String)
+2025-09-08 13:19:38.835 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.835 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.835 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778833(String)
+2025-09-08 13:19:38.836 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.836 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.836 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_634273a7@example.com(String)
+2025-09-08 13:19:38.836 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.837 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.837 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: e45ca05ebd1d4a8faec566cbdb11a9be(String), it_634273a7(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778833(String), it_634273a7@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.837076(LocalDateTime), 2025-09-08T13:19:38.837083(LocalDateTime)
+2025-09-08 13:19:38.838 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.838 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：e45ca05ebd1d4a8faec566cbdb11a9be
+2025-09-08 13:19:38.838 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.838 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=e45ca05ebd1d4a8faec566cbdb11a9be, username= (truncated)...]
+2025-09-08 13:19:38.839 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#getUserById(String)
+2025-09-08 13:19:38.839 [main] INFO  c.p.u.service.impl.UserServiceImpl - 根据用户ID查询用户：e45ca05ebd1d4a8faec566cbdb11a9be
+2025-09-08 13:19:38.840 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,user_id,username,password,salt,real_name,id_card,phone,email,status,create_time,update_time,deleted FROM t_user WHERE deleted=0 AND (user_id = ?)
+2025-09-08 13:19:38.840 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==> Parameters: e45ca05ebd1d4a8faec566cbdb11a9be(String)
+2025-09-08 13:19:38.841 [main] DEBUG c.p.u.mapper.UserMapper.selectList - <==      Total: 1
+2025-09-08 13:19:38.841 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.841 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=操作成功, data=UserResponse(userId=e45ca05ebd1d4a8faec566cbdb11a9be, username= (truncated)...]
+2025-09-08 13:19:38.844 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#register(UserRegisterRequest)
+2025-09-08 13:19:38.844 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [UserRegisterRequest(username=it_d0a44270, password=123456, confirmPassword=123456, realName=null, id (truncated)...]
+2025-09-08 13:19:38.845 [main] INFO  c.p.user.controller.UserController - User register request: it_d0a44270
+2025-09-08 13:19:38.845 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册开始，用户名：it_d0a44270
+2025-09-08 13:19:38.845 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (username = ?)
+2025-09-08 13:19:38.845 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_d0a44270(String)
+2025-09-08 13:19:38.846 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.846 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (phone = ?)
+2025-09-08 13:19:38.846 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: 13808778844(String)
+2025-09-08 13:19:38.847 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.847 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==>  Preparing: SELECT COUNT( * ) AS total FROM t_user WHERE deleted=0 AND (email = ?)
+2025-09-08 13:19:38.847 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - ==> Parameters: it_d0a44270@example.com(String)
+2025-09-08 13:19:38.848 [main] DEBUG c.p.u.mapper.UserMapper.selectCount - <==      Total: 1
+2025-09-08 13:19:38.848 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO t_user ( user_id, username, password, salt, phone, email, status, create_time, update_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )
+2025-09-08 13:19:38.848 [main] DEBUG c.p.user.mapper.UserMapper.insert - ==> Parameters: 22567c8516094abf94213a56b46dfc01(String), it_d0a44270(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778844(String), it_d0a44270@example.com(String), ACTIVE(String), 2025-09-08T13:19:38.848509(LocalDateTime), 2025-09-08T13:19:38.848515(LocalDateTime)
+2025-09-08 13:19:38.849 [main] DEBUG c.p.user.mapper.UserMapper.insert - <==    Updates: 1
+2025-09-08 13:19:38.849 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户注册成功，用户ID：22567c8516094abf94213a56b46dfc01
+2025-09-08 13:19:38.850 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.850 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=注册成功, data=UserResponse(userId=22567c8516094abf94213a56b46dfc01, username= (truncated)...]
+2025-09-08 13:19:38.851 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.payment.user.controller.UserController#unfreezeUser(String)
+2025-09-08 13:19:38.851 [main] INFO  c.p.u.service.impl.UserServiceImpl - 解冻用户，用户ID：22567c8516094abf94213a56b46dfc01
+2025-09-08 13:19:38.852 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==>  Preparing: SELECT id,user_id,username,password,salt,real_name,id_card,phone,email,status,create_time,update_time,deleted FROM t_user WHERE deleted=0 AND (user_id = ?)
+2025-09-08 13:19:38.852 [main] DEBUG c.p.u.mapper.UserMapper.selectList - ==> Parameters: 22567c8516094abf94213a56b46dfc01(String)
+2025-09-08 13:19:38.852 [main] DEBUG c.p.u.mapper.UserMapper.selectList - <==      Total: 1
+2025-09-08 13:19:38.853 [main] DEBUG c.p.u.mapper.UserMapper.updateById - ==>  Preparing: UPDATE t_user SET user_id=?, username=?, password=?, salt=?, phone=?, email=?, status=?, create_time=?, update_time=? WHERE id=? AND deleted=0
+2025-09-08 13:19:38.853 [main] DEBUG c.p.u.mapper.UserMapper.updateById - ==> Parameters: 22567c8516094abf94213a56b46dfc01(String), it_d0a44270(String), e10adc3949ba59abbe56e057f20f883e(String), default_salt(String), 13808778844(String), it_d0a44270@example.com(String), ACTIVE(String), 2025-09-08T13:19:39(LocalDateTime), 2025-09-08T13:19:38.852990(LocalDateTime), 535(Long)
+2025-09-08 13:19:38.853 [main] DEBUG c.p.u.mapper.UserMapper.updateById - <==    Updates: 1
+2025-09-08 13:19:38.853 [main] INFO  c.p.u.service.impl.UserServiceImpl - 用户解冻结果：成功
+2025-09-08 13:19:38.854 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
+2025-09-08 13:19:38.854 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(code=0000, message=解冻成功, data=true, requestId=1a0ddc76557b48fb86f8f1a5eb4c7196, timestamp=175 (truncated)...]
+2025-09-08 13:19:38.899 [SpringApplicationShutdownHook] DEBUG o.s.w.c.s.GenericWebApplicationContext - Closing org.springframework.web.context.support.GenericWebApplicationContext@45d4421d, started on Mon Sep 08 13:19:35 CST 2025
+2025-09-08 13:19:39.002 [SpringApplicationShutdownHook] INFO  c.alibaba.druid.pool.DruidDataSource - {dataSource-1} closing ...
+2025-09-08 13:19:39.009 [SpringApplicationShutdownHook] INFO  c.alibaba.druid.pool.DruidDataSource - {dataSource-1} closed

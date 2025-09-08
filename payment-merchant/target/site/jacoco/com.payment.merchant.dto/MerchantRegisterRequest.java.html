@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MerchantRegisterRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Payment Merchant Service</a> &gt; <a href="index.source.html" class="el_package">com.payment.merchant.dto</a> &gt; <span class="el_source">MerchantRegisterRequest.java</span></div><h1>MerchantRegisterRequest.java</h1><pre class="source lang-java linenums">package com.payment.merchant.dto;
+
+import lombok.Data;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
+/**
+ * 商户注册请求DTO
+ *
+ * @author Payment Platform Team
+ * @since 1.0.0
+ */
+<span class="pc bnc" id="L15" title="All 70 branches missed.">@Data</span>
+public class MerchantRegisterRequest {
+
+    /**
+     * 商户名称
+     */
+    @NotBlank(message = &quot;商户名称不能为空&quot;)
+<span class="fc" id="L22">    private String merchantName;</span>
+
+    /**
+     * 商户编码
+     */
+    @NotBlank(message = &quot;商户编码不能为空&quot;)
+    @Pattern(regexp = &quot;^[A-Z0-9_]{6,20}$&quot;, message = &quot;商户编码格式不正确&quot;)
+<span class="fc" id="L29">    private String merchantCode;</span>
+
+    /**
+     * 联系人姓名
+     */
+    @NotBlank(message = &quot;联系人姓名不能为空&quot;)
+<span class="fc" id="L35">    private String contactName;</span>
+
+    /**
+     * 联系人手机
+     */
+    @NotBlank(message = &quot;联系人手机不能为空&quot;)
+    @Pattern(regexp = &quot;^1[3-9]\\d{9}$&quot;, message = &quot;手机号格式不正确&quot;)
+<span class="fc" id="L42">    private String contactPhone;</span>
+
+    /**
+     * 联系人邮箱
+     */
+    @NotBlank(message = &quot;联系人邮箱不能为空&quot;)
+    @Email(message = &quot;邮箱格式不正确&quot;)
+<span class="fc" id="L49">    private String contactEmail;</span>
+
+    /**
+     * 营业执照号
+     */
+    @NotBlank(message = &quot;营业执照号不能为空&quot;)
+<span class="fc" id="L55">    private String businessLicense;</span>
+
+    /**
+     * 法人姓名
+     */
+    @NotBlank(message = &quot;法人姓名不能为空&quot;)
+<span class="fc" id="L61">    private String legalPerson;</span>
+
+    /**
+     * 地址
+     */
+    @NotBlank(message = &quot;地址不能为空&quot;)
+<span class="fc" id="L67">    private String address;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

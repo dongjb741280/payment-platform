@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Payment User Service</a> &gt; <a href="index.source.html" class="el_package">com.payment.user.controller</a> &gt; <span class="el_source">UserController.java</span></div><h1>UserController.java</h1><pre class="source lang-java linenums">package com.payment.user.controller;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.payment.common.result.Result;
+import com.payment.user.dto.UserRegisterRequest;
+import com.payment.user.dto.UserResponse;
+import com.payment.user.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+/**
+ * 用户控制器
+ *
+ * @author Payment Platform Team
+ * @since 1.0.0
+ */
+@Api(tags = &quot;用户管理&quot;)
+<span class="fc" id="L27">@Slf4j</span>
+@RestController
+@RequestMapping(&quot;/api/user&quot;)
+<span class="fc" id="L30">@RequiredArgsConstructor</span>
+@Validated
+public class UserController {
+
+    private final UserService userService;
+
+    /**
+     * 用户注册
+     */
+    @ApiOperation(value = &quot;用户注册&quot;, notes = &quot;注册新用户&quot;)
+    @PostMapping(&quot;/register&quot;)
+    public Result&lt;UserResponse&gt; register(@ApiParam(value = &quot;用户注册请求&quot;, required = true) @Valid @RequestBody UserRegisterRequest request) {
+<span class="fc" id="L42">        log.info(&quot;User register request: {}&quot;, request.getUsername());</span>
+<span class="fc" id="L43">        UserResponse response = userService.register(request);</span>
+<span class="fc" id="L44">        return Result.success(&quot;注册成功&quot;, response);</span>
+    }
+
+    /**
+     * 根据用户ID查询用户
+     */
+    @ApiOperation(value = &quot;根据用户ID查询用户&quot;, notes = &quot;通过用户ID获取用户详细信息&quot;)
+    @GetMapping(&quot;/{userId}&quot;)
+    public Result&lt;UserResponse&gt; getUserById(@ApiParam(value = &quot;用户ID&quot;, required = true) @PathVariable @NotBlank String userId) {
+<span class="fc" id="L53">        UserResponse response = userService.getUserById(userId);</span>
+<span class="fc" id="L54">        return Result.success(response);</span>
+    }
+
+    /**
+     * 根据用户名查询用户
+     */
+    @ApiOperation(value = &quot;根据用户名查询用户&quot;, notes = &quot;通过用户名获取用户详细信息&quot;)
+    @GetMapping(&quot;/username/{username}&quot;)
+    public Result&lt;UserResponse&gt; getUserByUsername(@ApiParam(value = &quot;用户名&quot;, required = true) @PathVariable @NotBlank String username) {
+<span class="fc" id="L63">        UserResponse response = userService.getUserByUsername(username);</span>
+<span class="fc" id="L64">        return Result.success(response);</span>
+    }
+
+    /**
+     * 根据手机号查询用户
+     */
+    @ApiOperation(value = &quot;根据手机号查询用户&quot;, notes = &quot;通过手机号获取用户详细信息&quot;)
+    @GetMapping(&quot;/phone/{phone}&quot;)
+    public Result&lt;UserResponse&gt; getUserByPhone(@ApiParam(value = &quot;手机号&quot;, required = true) @PathVariable @NotBlank String phone) {
+<span class="fc" id="L73">        UserResponse response = userService.getUserByPhone(phone);</span>
+<span class="fc" id="L74">        return Result.success(response);</span>
+    }
+
+    /**
+     * 根据邮箱查询用户
+     */
+    @ApiOperation(value = &quot;根据邮箱查询用户&quot;, notes = &quot;通过邮箱获取用户详细信息&quot;)
+    @GetMapping(&quot;/email/{email}&quot;)
+    public Result&lt;UserResponse&gt; getUserByEmail(@ApiParam(value = &quot;邮箱&quot;, required = true) @PathVariable @NotBlank String email) {
+<span class="fc" id="L83">        UserResponse response = userService.getUserByEmail(email);</span>
+<span class="fc" id="L84">        return Result.success(response);</span>
+    }
+
+    /**
+     * 分页查询用户
+     */
+    @ApiOperation(value = &quot;分页查询用户&quot;, notes = &quot;分页获取用户列表&quot;)
+    @GetMapping(&quot;/page&quot;)
+    public Result&lt;Page&lt;UserResponse&gt;&gt; getUserPage(
+            @ApiParam(value = &quot;页码&quot;, defaultValue = &quot;1&quot;) @RequestParam(defaultValue = &quot;1&quot;) int pageNum,
+            @ApiParam(value = &quot;每页大小&quot;, defaultValue = &quot;20&quot;) @RequestParam(defaultValue = &quot;20&quot;) int pageSize) {
+<span class="fc" id="L95">        Page&lt;UserResponse&gt; response = userService.getUserPage(pageNum, pageSize);</span>
+<span class="fc" id="L96">        return Result.success(response);</span>
+    }
+
+    /**
+     * 更新用户信息
+     */
+    @ApiOperation(value = &quot;更新用户信息&quot;, notes = &quot;更新指定用户的信息&quot;)
+    @PutMapping(&quot;/{userId}&quot;)
+    public Result&lt;UserResponse&gt; updateUser(
+            @ApiParam(value = &quot;用户ID&quot;, required = true) @PathVariable @NotBlank String userId,
+            @ApiParam(value = &quot;用户更新请求&quot;, required = true) @Valid @RequestBody UserRegisterRequest request) {
+<span class="fc" id="L107">        UserResponse response = userService.updateUser(userId, request);</span>
+<span class="fc" id="L108">        return Result.success(&quot;更新成功&quot;, response);</span>
+    }
+
+    /**
+     * 删除用户
+     */
+    @ApiOperation(value = &quot;删除用户&quot;, notes = &quot;删除指定用户&quot;)
+    @DeleteMapping(&quot;/{userId}&quot;)
+    public Result&lt;Boolean&gt; deleteUser(@ApiParam(value = &quot;用户ID&quot;, required = true) @PathVariable @NotBlank String userId) {
+<span class="fc" id="L117">        boolean result = userService.deleteUser(userId);</span>
+<span class="fc" id="L118">        return Result.success(&quot;删除成功&quot;, result);</span>
+    }
+
+    /**
+     * 冻结用户
+     */
+    @ApiOperation(value = &quot;冻结用户&quot;, notes = &quot;冻结指定用户账户&quot;)
+    @PutMapping(&quot;/{userId}/freeze&quot;)
+    public Result&lt;Boolean&gt; freezeUser(@ApiParam(value = &quot;用户ID&quot;, required = true) @PathVariable @NotBlank String userId) {
+<span class="fc" id="L127">        boolean result = userService.freezeUser(userId);</span>
+<span class="fc" id="L128">        return Result.success(&quot;冻结成功&quot;, result);</span>
+    }
+
+    /**
+     * 解冻用户
+     */
+    @ApiOperation(value = &quot;解冻用户&quot;, notes = &quot;解冻指定用户账户&quot;)
+    @PutMapping(&quot;/{userId}/unfreeze&quot;)
+    public Result&lt;Boolean&gt; unfreezeUser(@ApiParam(value = &quot;用户ID&quot;, required = true) @PathVariable @NotBlank String userId) {
+<span class="fc" id="L137">        boolean result = userService.unfreezeUser(userId);</span>
+<span class="fc" id="L138">        return Result.success(&quot;解冻成功&quot;, result);</span>
+    }
+
+    /**
+     * 检查用户名是否存在
+     */
+    @ApiOperation(value = &quot;检查用户名是否存在&quot;, notes = &quot;检查指定用户名是否已被使用&quot;)
+    @GetMapping(&quot;/check/username/{username}&quot;)
+    public Result&lt;Boolean&gt; checkUsername(@ApiParam(value = &quot;用户名&quot;, required = true) @PathVariable @NotBlank String username) {
+<span class="fc" id="L147">        boolean exists = userService.isUsernameExists(username);</span>
+<span class="fc" id="L148">        return Result.success(exists);</span>
+    }
+
+    /**
+     * 检查手机号是否存在
+     */
+    @ApiOperation(value = &quot;检查手机号是否存在&quot;, notes = &quot;检查指定手机号是否已被使用&quot;)
+    @GetMapping(&quot;/check/phone/{phone}&quot;)
+    public Result&lt;Boolean&gt; checkPhone(@ApiParam(value = &quot;手机号&quot;, required = true) @PathVariable @NotBlank String phone) {
+<span class="fc" id="L157">        boolean exists = userService.isPhoneExists(phone);</span>
+<span class="fc" id="L158">        return Result.success(exists);</span>
+    }
+
+    /**
+     * 检查邮箱是否存在
+     */
+    @ApiOperation(value = &quot;检查邮箱是否存在&quot;, notes = &quot;检查指定邮箱是否已被使用&quot;)
+    @GetMapping(&quot;/check/email/{email}&quot;)
+    public Result&lt;Boolean&gt; checkEmail(@ApiParam(value = &quot;邮箱&quot;, required = true) @PathVariable @NotBlank String email) {
+<span class="fc" id="L167">        boolean exists = userService.isEmailExists(email);</span>
+<span class="fc" id="L168">        return Result.success(exists);</span>
+    }
+
+    /**
+     * 修改密码
+     */
+    @ApiOperation(value = &quot;修改密码&quot;, notes = &quot;修改指定用户的密码&quot;)
+    @PutMapping(&quot;/{userId}/password&quot;)
+    public Result&lt;Boolean&gt; changePassword(
+            @ApiParam(value = &quot;用户ID&quot;, required = true) @PathVariable @NotBlank String userId,
+            @ApiParam(value = &quot;旧密码&quot;, required = true) @RequestParam @NotBlank String oldPassword,
+            @ApiParam(value = &quot;新密码&quot;, required = true) @RequestParam @NotBlank String newPassword) {
+<span class="fc" id="L180">        boolean result = userService.changePassword(userId, oldPassword, newPassword);</span>
+<span class="fc" id="L181">        return Result.success(&quot;密码修改成功&quot;, result);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

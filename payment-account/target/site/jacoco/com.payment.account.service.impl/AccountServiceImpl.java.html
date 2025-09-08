@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Payment Account Service</a> &gt; <a href="index.source.html" class="el_package">com.payment.account.service.impl</a> &gt; <span class="el_source">AccountServiceImpl.java</span></div><h1>AccountServiceImpl.java</h1><pre class="source lang-java linenums">package com.payment.account.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.payment.common.constant.CommonConstants;
+import com.payment.common.exception.BusinessException;
+import com.payment.common.constant.ErrorCodes;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import com.payment.common.util.BusinessIdGenerator;
+import com.payment.account.dto.AccountCreateRequest;
+import com.payment.account.dto.AccountResponse;
+import com.payment.account.dto.BalanceOperationRequest;
+import com.payment.account.entity.Account;
+import com.payment.account.entity.AccountBalance;
+import com.payment.account.entity.AccountFlow;
+import com.payment.account.mapper.AccountBalanceMapper;
+import com.payment.account.mapper.AccountFlowMapper;
+import com.payment.account.mapper.AccountMapper;
+import com.payment.account.service.AccountService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * 账户服务实现类
+ *
+ * @author Payment Platform Team
+ * @since 1.0.0
+ */
+<span class="fc" id="L37">@Slf4j</span>
+@Service
+<span class="fc" id="L39">@RequiredArgsConstructor</span>
+public class AccountServiceImpl implements AccountService {
+
+    private final AccountMapper accountMapper;
+    private final AccountBalanceMapper accountBalanceMapper;
+    private final AccountFlowMapper accountFlowMapper;
+    private final BusinessIdGenerator businessIdGenerator;
+    private final MessageSource messageSource;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public AccountResponse createAccount(AccountCreateRequest request) {
+<span class="fc" id="L51">        log.info(&quot;开始创建账户，用户ID：{}，账户类型：{}&quot;, request.getUserId(), request.getAccountType());</span>
+
+        // 检查是否已存在相同类型的账户
+<span class="fc" id="L54">        LambdaQueryWrapper&lt;Account&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L55">        queryWrapper.eq(Account::getUserId, request.getUserId())</span>
+<span class="fc" id="L56">                   .eq(Account::getAccountType, request.getAccountType())</span>
+<span class="fc" id="L57">                   .eq(Account::getCurrency, request.getCurrency())</span>
+<span class="fc" id="L58">                   .eq(Account::getDeleted, false);</span>
+        
+<span class="fc" id="L60">        Account existingAccount = accountMapper.selectOne(queryWrapper);</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (existingAccount != null) {</span>
+<span class="nc" id="L62">            throw new BusinessException(ErrorCodes.ACCOUNT_EXISTS, messageSource.getMessage(&quot;account.type.exists&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+
+        // 创建账户实体
+<span class="fc" id="L66">        Account account = new Account();</span>
+        // 生成账户ID（32位业务ID）
+<span class="fc" id="L68">        account.setAccountId(businessIdGenerator.generateAccountNo());</span>
+<span class="fc" id="L69">        account.setUserId(request.getUserId());</span>
+<span class="fc" id="L70">        account.setMerchantId(request.getMerchantId());</span>
+<span class="fc" id="L71">        account.setAccountType(request.getAccountType());</span>
+<span class="fc" id="L72">        account.setCurrency(request.getCurrency());</span>
+<span class="fc" id="L73">        account.setStatus(CommonConstants.STATUS_ACTIVE);</span>
+<span class="fc" id="L74">        account.setCreateTime(LocalDateTime.now());</span>
+<span class="fc" id="L75">        account.setUpdateTime(LocalDateTime.now());</span>
+<span class="fc" id="L76">        account.setDeleted(false);</span>
+
+        // 保存账户信息
+<span class="fc" id="L79">        int result = accountMapper.insert(account);</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (result &lt;= 0) {</span>
+<span class="nc" id="L81">            throw new BusinessException(ErrorCodes.ACCOUNT_CREATE_FAILED, messageSource.getMessage(&quot;account.create.failed&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+
+        // 创建账户余额记录
+<span class="fc" id="L85">        AccountBalance accountBalance = new AccountBalance();</span>
+<span class="fc" id="L86">        accountBalance.setAccountId(account.getAccountId());</span>
+<span class="fc" id="L87">        accountBalance.setAvailableBalance(BigDecimal.ZERO);</span>
+<span class="fc" id="L88">        accountBalance.setFrozenBalance(BigDecimal.ZERO);</span>
+<span class="fc" id="L89">        accountBalance.setTotalBalance(BigDecimal.ZERO);</span>
+<span class="fc" id="L90">        accountBalance.setCurrency(request.getCurrency());</span>
+<span class="fc" id="L91">        accountBalance.setVersion(0);</span>
+<span class="fc" id="L92">        accountBalance.setCreateTime(LocalDateTime.now());</span>
+<span class="fc" id="L93">        accountBalance.setUpdateTime(LocalDateTime.now());</span>
+
+<span class="fc" id="L95">        int balanceResult = accountBalanceMapper.insert(accountBalance);</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (balanceResult &lt;= 0) {</span>
+<span class="nc" id="L97">            throw new BusinessException(ErrorCodes.ACCOUNT_BALANCE_CREATE_FAILED, messageSource.getMessage(&quot;account.balance.create.failed&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+
+<span class="fc" id="L100">        log.info(&quot;账户创建成功，账户ID：{}&quot;, account.getAccountId());</span>
+
+        // 转换为响应DTO
+<span class="fc" id="L103">        return convertToResponse(account, accountBalance);</span>
+    }
+
+    @Override
+    public AccountResponse getAccountById(String accountId) {
+<span class="fc" id="L108">        log.info(&quot;根据账户ID获取账户信息，账户ID：{}&quot;, accountId);</span>
+
+<span class="fc" id="L110">        Account account = getAccountEntityById(accountId);</span>
+<span class="fc" id="L111">        AccountBalance accountBalance = getAccountBalanceByAccountId(accountId);</span>
+
+<span class="fc" id="L113">        return convertToResponse(account, accountBalance);</span>
+    }
+
+    @Override
+    public List&lt;AccountResponse&gt; getAccountsByUserId(String userId) {
+<span class="fc" id="L118">        log.info(&quot;根据用户ID获取账户列表，用户ID：{}&quot;, userId);</span>
+
+<span class="fc" id="L120">        LambdaQueryWrapper&lt;Account&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L121">        queryWrapper.eq(Account::getUserId, userId)</span>
+<span class="fc" id="L122">                   .eq(Account::getDeleted, false);</span>
+        
+<span class="fc" id="L124">        List&lt;Account&gt; accounts = accountMapper.selectList(queryWrapper);</span>
+        
+<span class="fc" id="L126">        return accounts.stream().map(account -&gt; {</span>
+<span class="fc" id="L127">            AccountBalance accountBalance = getAccountBalanceByAccountId(account.getAccountId());</span>
+<span class="fc" id="L128">            return convertToResponse(account, accountBalance);</span>
+<span class="fc" id="L129">        }).collect(Collectors.toList());</span>
+    }
+
+    @Override
+    public List&lt;AccountResponse&gt; getAccountsByMerchantId(String merchantId) {
+<span class="nc" id="L134">        log.info(&quot;根据商户ID获取账户列表，商户ID：{}&quot;, merchantId);</span>
+
+<span class="nc" id="L136">        LambdaQueryWrapper&lt;Account&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="nc" id="L137">        queryWrapper.eq(Account::getMerchantId, merchantId)</span>
+<span class="nc" id="L138">                   .eq(Account::getDeleted, false);</span>
+        
+<span class="nc" id="L140">        List&lt;Account&gt; accounts = accountMapper.selectList(queryWrapper);</span>
+        
+<span class="nc" id="L142">        return accounts.stream().map(account -&gt; {</span>
+<span class="nc" id="L143">            AccountBalance accountBalance = getAccountBalanceByAccountId(account.getAccountId());</span>
+<span class="nc" id="L144">            return convertToResponse(account, accountBalance);</span>
+<span class="nc" id="L145">        }).collect(Collectors.toList());</span>
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deposit(BalanceOperationRequest request) {
+<span class="fc" id="L151">        log.info(&quot;账户充值，账户ID：{}，金额：{}&quot;, request.getAccountId(), request.getAmount());</span>
+
+<span class="fc" id="L153">        AccountBalance accountBalance = getAccountBalanceByAccountId(request.getAccountId());</span>
+        
+        // 更新余额
+<span class="fc" id="L156">        BigDecimal newAvailableBalance = accountBalance.getAvailableBalance().add(request.getAmount());</span>
+<span class="fc" id="L157">        BigDecimal newTotalBalance = accountBalance.getTotalBalance().add(request.getAmount());</span>
+        
+<span class="fc" id="L159">        accountBalance.setAvailableBalance(newAvailableBalance);</span>
+<span class="fc" id="L160">        accountBalance.setTotalBalance(newTotalBalance);</span>
+<span class="fc" id="L161">        accountBalance.setUpdateTime(LocalDateTime.now());</span>
+
+<span class="fc" id="L163">        int result = accountBalanceMapper.updateById(accountBalance);</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        if (result &lt;= 0) {</span>
+<span class="nc" id="L165">            throw new BusinessException(ErrorCodes.BALANCE_UPDATE_FAILED, messageSource.getMessage(&quot;balance.update.failed&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+
+        // 记录流水
+<span class="fc" id="L169">        recordAccountFlow(request.getAccountId(), CommonConstants.TRANSACTION_TYPE_DEPOSIT, request.getAmount(), </span>
+<span class="fc" id="L170">                         accountBalance.getAvailableBalance().subtract(request.getAmount()), </span>
+<span class="fc" id="L171">                         newAvailableBalance, request.getRemark());</span>
+
+<span class="fc" id="L173">        log.info(&quot;账户充值成功，账户ID：{}，新余额：{}&quot;, request.getAccountId(), newAvailableBalance);</span>
+<span class="fc" id="L174">        return true;</span>
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean withdraw(BalanceOperationRequest request) {
+<span class="fc" id="L180">        log.info(&quot;账户扣款，账户ID：{}，金额：{}&quot;, request.getAccountId(), request.getAmount());</span>
+
+<span class="fc" id="L182">        AccountBalance accountBalance = getAccountBalanceByAccountId(request.getAccountId());</span>
+        
+        // 检查余额是否充足
+<span class="pc bpc" id="L185" title="1 of 2 branches missed.">        if (accountBalance.getAvailableBalance().compareTo(request.getAmount()) &lt; 0) {</span>
+<span class="nc" id="L186">            throw new BusinessException(ErrorCodes.INSUFFICIENT_BALANCE, messageSource.getMessage(&quot;insufficient.balance&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+
+        // 更新余额
+<span class="fc" id="L190">        BigDecimal newAvailableBalance = accountBalance.getAvailableBalance().subtract(request.getAmount());</span>
+<span class="fc" id="L191">        BigDecimal newTotalBalance = accountBalance.getTotalBalance().subtract(request.getAmount());</span>
+        
+<span class="fc" id="L193">        accountBalance.setAvailableBalance(newAvailableBalance);</span>
+<span class="fc" id="L194">        accountBalance.setTotalBalance(newTotalBalance);</span>
+<span class="fc" id="L195">        accountBalance.setUpdateTime(LocalDateTime.now());</span>
+
+<span class="fc" id="L197">        int result = accountBalanceMapper.updateById(accountBalance);</span>
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if (result &lt;= 0) {</span>
+<span class="nc" id="L199">            throw new BusinessException(ErrorCodes.BALANCE_UPDATE_FAILED, messageSource.getMessage(&quot;balance.update.failed&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+
+        // 记录流水
+<span class="fc" id="L203">        recordAccountFlow(request.getAccountId(), CommonConstants.TRANSACTION_TYPE_WITHDRAW, request.getAmount(), </span>
+<span class="fc" id="L204">                         accountBalance.getAvailableBalance().add(request.getAmount()), </span>
+<span class="fc" id="L205">                         newAvailableBalance, request.getRemark());</span>
+
+<span class="fc" id="L207">        log.info(&quot;账户扣款成功，账户ID：{}，新余额：{}&quot;, request.getAccountId(), newAvailableBalance);</span>
+<span class="fc" id="L208">        return true;</span>
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean freeze(String accountId, BigDecimal amount) {
+<span class="fc" id="L214">        log.info(&quot;账户冻结，账户ID：{}，金额：{}&quot;, accountId, amount);</span>
+
+<span class="fc" id="L216">        AccountBalance accountBalance = getAccountBalanceByAccountId(accountId);</span>
+        
+        // 检查可用余额是否充足
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        if (accountBalance.getAvailableBalance().compareTo(amount) &lt; 0) {</span>
+<span class="fc" id="L220">            throw new BusinessException(ErrorCodes.INSUFFICIENT_AVAILABLE_BALANCE, messageSource.getMessage(&quot;insufficient.available.balance&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+
+        // 更新余额
+<span class="fc" id="L224">        BigDecimal newAvailableBalance = accountBalance.getAvailableBalance().subtract(amount);</span>
+<span class="fc" id="L225">        BigDecimal newFrozenBalance = accountBalance.getFrozenBalance().add(amount);</span>
+        
+<span class="fc" id="L227">        accountBalance.setAvailableBalance(newAvailableBalance);</span>
+<span class="fc" id="L228">        accountBalance.setFrozenBalance(newFrozenBalance);</span>
+<span class="fc" id="L229">        accountBalance.setUpdateTime(LocalDateTime.now());</span>
+
+<span class="fc" id="L231">        int result = accountBalanceMapper.updateById(accountBalance);</span>
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">        if (result &lt;= 0) {</span>
+<span class="nc" id="L233">            throw new BusinessException(ErrorCodes.BALANCE_UPDATE_FAILED, messageSource.getMessage(&quot;balance.update.failed&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+
+        // 记录流水
+<span class="fc" id="L237">        recordAccountFlow(accountId, CommonConstants.ACCOUNT_FLOW_FREEZE, amount, </span>
+<span class="fc" id="L238">                         accountBalance.getAvailableBalance().add(amount), </span>
+                         newAvailableBalance, &quot;账户冻结&quot;);
+
+<span class="fc" id="L241">        log.info(&quot;账户冻结成功，账户ID：{}，冻结金额：{}&quot;, accountId, amount);</span>
+<span class="fc" id="L242">        return true;</span>
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean unfreeze(String accountId, BigDecimal amount) {
+<span class="fc" id="L248">        log.info(&quot;账户解冻，账户ID：{}，金额：{}&quot;, accountId, amount);</span>
+
+<span class="fc" id="L250">        AccountBalance accountBalance = getAccountBalanceByAccountId(accountId);</span>
+        
+        // 检查冻结余额是否充足
+<span class="fc bfc" id="L253" title="All 2 branches covered.">        if (accountBalance.getFrozenBalance().compareTo(amount) &lt; 0) {</span>
+<span class="fc" id="L254">            throw new BusinessException(ErrorCodes.INSUFFICIENT_FROZEN_BALANCE, messageSource.getMessage(&quot;insufficient.frozen.balance&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+
+        // 更新余额
+<span class="fc" id="L258">        BigDecimal newAvailableBalance = accountBalance.getAvailableBalance().add(amount);</span>
+<span class="fc" id="L259">        BigDecimal newFrozenBalance = accountBalance.getFrozenBalance().subtract(amount);</span>
+        
+<span class="fc" id="L261">        accountBalance.setAvailableBalance(newAvailableBalance);</span>
+<span class="fc" id="L262">        accountBalance.setFrozenBalance(newFrozenBalance);</span>
+<span class="fc" id="L263">        accountBalance.setUpdateTime(LocalDateTime.now());</span>
+
+<span class="fc" id="L265">        int result = accountBalanceMapper.updateById(accountBalance);</span>
+<span class="pc bpc" id="L266" title="1 of 2 branches missed.">        if (result &lt;= 0) {</span>
+<span class="nc" id="L267">            throw new BusinessException(ErrorCodes.BALANCE_UPDATE_FAILED, messageSource.getMessage(&quot;balance.update.failed&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+
+        // 记录流水
+<span class="fc" id="L271">        recordAccountFlow(accountId, CommonConstants.ACCOUNT_FLOW_UNFREEZE, amount, </span>
+<span class="fc" id="L272">                         accountBalance.getAvailableBalance().subtract(amount), </span>
+                         newAvailableBalance, &quot;账户解冻&quot;);
+
+<span class="fc" id="L275">        log.info(&quot;账户解冻成功，账户ID：{}，解冻金额：{}&quot;, accountId, amount);</span>
+<span class="fc" id="L276">        return true;</span>
+    }
+
+    @Override
+    public AccountResponse getAccountBalance(String accountId) {
+<span class="fc" id="L281">        log.info(&quot;获取账户余额，账户ID：{}&quot;, accountId);</span>
+
+<span class="fc" id="L283">        Account account = getAccountEntityById(accountId);</span>
+<span class="fc" id="L284">        AccountBalance accountBalance = getAccountBalanceByAccountId(accountId);</span>
+
+<span class="fc" id="L286">        return convertToResponse(account, accountBalance);</span>
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteAccount(String accountId) {
+<span class="fc" id="L292">        log.info(&quot;删除账户，账户ID：{}&quot;, accountId);</span>
+
+<span class="fc" id="L294">        Account existingAccount = getAccountEntityById(accountId);</span>
+        
+        // 软删除
+<span class="fc" id="L297">        existingAccount.setDeleted(true);</span>
+<span class="fc" id="L298">        existingAccount.setUpdateTime(LocalDateTime.now());</span>
+
+<span class="fc" id="L300">        int result = accountMapper.updateById(existingAccount);</span>
+<span class="pc bpc" id="L301" title="1 of 2 branches missed.">        if (result &lt;= 0) {</span>
+<span class="nc" id="L302">            throw new BusinessException(ErrorCodes.ACCOUNT_DELETE_FAILED, messageSource.getMessage(&quot;account.delete.failed&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+
+<span class="fc" id="L305">        log.info(&quot;账户删除成功，账户ID：{}&quot;, accountId);</span>
+<span class="fc" id="L306">    }</span>
+
+    /**
+     * 根据账户ID获取账户实体
+     */
+    private Account getAccountEntityById(String accountId) {
+<span class="fc" id="L312">        LambdaQueryWrapper&lt;Account&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L313">        queryWrapper.eq(Account::getAccountId, accountId)</span>
+<span class="fc" id="L314">                   .eq(Account::getDeleted, false);</span>
+        
+<span class="fc" id="L316">        Account account = accountMapper.selectOne(queryWrapper);</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        if (account == null) {</span>
+<span class="fc" id="L318">            throw new BusinessException(ErrorCodes.ACCOUNT_NOT_FOUND, messageSource.getMessage(&quot;account.not.exist&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+<span class="fc" id="L320">        return account;</span>
+    }
+
+    /**
+     * 根据账户ID获取账户余额
+     */
+    private AccountBalance getAccountBalanceByAccountId(String accountId) {
+<span class="fc" id="L327">        LambdaQueryWrapper&lt;AccountBalance&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L328">        queryWrapper.eq(AccountBalance::getAccountId, accountId);</span>
+        
+<span class="fc" id="L330">        AccountBalance accountBalance = accountBalanceMapper.selectOne(queryWrapper);</span>
+<span class="pc bpc" id="L331" title="1 of 2 branches missed.">        if (accountBalance == null) {</span>
+<span class="nc" id="L332">            throw new BusinessException(ErrorCodes.ACCOUNT_BALANCE_NOT_FOUND, messageSource.getMessage(&quot;account.balance.not.exist&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+<span class="fc" id="L334">        return accountBalance;</span>
+    }
+
+    /**
+     * 记录账户流水
+     */
+    private void recordAccountFlow(String accountId, String transactionType, BigDecimal amount, 
+                                 BigDecimal beforeBalance, BigDecimal afterBalance, String remark) {
+<span class="fc" id="L342">        AccountFlow accountFlow = new AccountFlow();</span>
+<span class="fc" id="L343">        accountFlow.setFlowNo(businessIdGenerator.generateBusinessId(&quot;FLOW&quot;));</span>
+<span class="fc" id="L344">        accountFlow.setAccountId(accountId);</span>
+<span class="fc" id="L345">        accountFlow.setTransactionType(transactionType);</span>
+<span class="fc" id="L346">        accountFlow.setAmount(amount);</span>
+<span class="fc" id="L347">        accountFlow.setBeforeBalance(beforeBalance);</span>
+<span class="fc" id="L348">        accountFlow.setAfterBalance(afterBalance);</span>
+<span class="fc" id="L349">        accountFlow.setCurrency(CommonConstants.CURRENCY_CNY); // 默认人民币</span>
+<span class="fc" id="L350">        accountFlow.setRemark(remark);</span>
+<span class="fc" id="L351">        accountFlow.setCreateTime(LocalDateTime.now());</span>
+
+<span class="fc" id="L353">        accountFlowMapper.insert(accountFlow);</span>
+<span class="fc" id="L354">    }</span>
+
+    /**
+     * 转换为响应DTO
+     */
+    private AccountResponse convertToResponse(Account account, AccountBalance accountBalance) {
+<span class="fc" id="L360">        AccountResponse response = new AccountResponse();</span>
+<span class="fc" id="L361">        BeanUtils.copyProperties(account, response);</span>
+<span class="pc bpc" id="L362" title="1 of 2 branches missed.">        if (accountBalance != null) {</span>
+<span class="fc" id="L363">            response.setAvailableBalance(accountBalance.getAvailableBalance());</span>
+<span class="fc" id="L364">            response.setFrozenBalance(accountBalance.getFrozenBalance());</span>
+<span class="fc" id="L365">            response.setTotalBalance(accountBalance.getTotalBalance());</span>
+        }
+<span class="fc" id="L367">        return response;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

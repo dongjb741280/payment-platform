@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Payment User Service</a> &gt; <a href="index.source.html" class="el_package">com.payment.user.service.impl</a> &gt; <span class="el_source">UserServiceImpl.java</span></div><h1>UserServiceImpl.java</h1><pre class="source lang-java linenums">package com.payment.user.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.payment.common.constant.CommonConstants;
+import com.payment.common.util.BusinessIdGenerator;
+import com.payment.user.dto.UserRegisterRequest;
+import com.payment.user.dto.UserResponse;
+import com.payment.user.entity.User;
+import com.payment.user.mapper.UserMapper;
+import com.payment.user.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+
+import java.time.LocalDateTime;
+
+/**
+ * 用户服务实现类
+ *
+ * @author Payment Platform Team
+ * @since 1.0.0
+ */
+<span class="fc" id="L28">@Slf4j</span>
+@Service
+<span class="fc" id="L30">@RequiredArgsConstructor</span>
+public class UserServiceImpl implements UserService {
+
+    private final UserMapper userMapper;
+    private final BusinessIdGenerator businessIdGenerator;
+    private final MessageSource messageSource;
+
+    @Override
+    public UserResponse register(UserRegisterRequest request) {
+<span class="fc" id="L39">        log.info(&quot;用户注册开始，用户名：{}&quot;, request.getUsername());</span>
+        
+        // 检查用户名是否已存在
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (isUsernameExists(request.getUsername())) {</span>
+<span class="fc" id="L43">            throw new RuntimeException(messageSource.getMessage(&quot;user.username.exists&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+        
+        // 检查手机号是否已存在（如果提供了手机号）
+<span class="pc bpc" id="L47" title="3 of 6 branches missed.">        if (request.getPhone() != null &amp;&amp; !request.getPhone().trim().isEmpty() &amp;&amp; isPhoneExists(request.getPhone())) {</span>
+<span class="nc" id="L48">            throw new RuntimeException(messageSource.getMessage(&quot;user.phone.exists&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+        
+        // 检查邮箱是否已存在（如果提供了邮箱）
+<span class="pc bpc" id="L52" title="3 of 6 branches missed.">        if (request.getEmail() != null &amp;&amp; !request.getEmail().trim().isEmpty() &amp;&amp; isEmailExists(request.getEmail())) {</span>
+<span class="nc" id="L53">            throw new RuntimeException(messageSource.getMessage(&quot;user.email.exists&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+        
+        // 创建用户实体
+<span class="fc" id="L57">        User user = new User();</span>
+<span class="fc" id="L58">        user.setUserId(businessIdGenerator.generateUserId());</span>
+<span class="fc" id="L59">        user.setUsername(request.getUsername());</span>
+<span class="fc" id="L60">        user.setPassword(DigestUtils.md5DigestAsHex(request.getPassword().getBytes()));</span>
+<span class="fc" id="L61">        user.setSalt(&quot;default_salt&quot;); // 设置默认盐值</span>
+<span class="fc" id="L62">        user.setRealName(request.getRealName());</span>
+<span class="fc" id="L63">        user.setPhone(request.getPhone());</span>
+<span class="fc" id="L64">        user.setEmail(request.getEmail());</span>
+<span class="fc" id="L65">        user.setStatus(CommonConstants.STATUS_ACTIVE);</span>
+<span class="fc" id="L66">        user.setCreateTime(LocalDateTime.now());</span>
+<span class="fc" id="L67">        user.setUpdateTime(LocalDateTime.now());</span>
+        
+        // 保存用户
+<span class="fc" id="L70">        userMapper.insert(user);</span>
+        
+<span class="fc" id="L72">        log.info(&quot;用户注册成功，用户ID：{}&quot;, user.getUserId());</span>
+        
+        // 返回用户信息
+<span class="fc" id="L75">        return convertToResponse(user);</span>
+    }
+
+    @Override
+    public UserResponse getUserById(String userId) {
+<span class="fc" id="L80">        log.info(&quot;根据用户ID查询用户：{}&quot;, userId);</span>
+<span class="fc" id="L81">        LambdaQueryWrapper&lt;User&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L82">        queryWrapper.eq(User::getUserId, userId);</span>
+<span class="fc" id="L83">        User user = userMapper.selectOne(queryWrapper);</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L85">            throw new RuntimeException(messageSource.getMessage(&quot;user.not.exist&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+        
+<span class="fc" id="L88">        return convertToResponse(user);</span>
+    }
+
+    @Override
+    public UserResponse getUserByUsername(String username) {
+<span class="fc" id="L93">        log.info(&quot;根据用户名查询用户：{}&quot;, username);</span>
+        
+<span class="fc" id="L95">        LambdaQueryWrapper&lt;User&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L96">        queryWrapper.eq(User::getUsername, username);</span>
+        
+<span class="fc" id="L98">        User user = userMapper.selectOne(queryWrapper);</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (user == null) {</span>
+<span class="fc" id="L100">            throw new RuntimeException(messageSource.getMessage(&quot;user.not.exist&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+        
+<span class="fc" id="L103">        return convertToResponse(user);</span>
+    }
+
+    @Override
+    public UserResponse getUserByPhone(String phone) {
+<span class="fc" id="L108">        log.info(&quot;根据手机号查询用户：{}&quot;, phone);</span>
+        
+<span class="fc" id="L110">        LambdaQueryWrapper&lt;User&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L111">        queryWrapper.eq(User::getPhone, phone);</span>
+        
+<span class="fc" id="L113">        User user = userMapper.selectOne(queryWrapper);</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L115">            throw new RuntimeException(messageSource.getMessage(&quot;user.not.exist&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+        
+<span class="fc" id="L118">        return convertToResponse(user);</span>
+    }
+
+    @Override
+    public UserResponse getUserByEmail(String email) {
+<span class="fc" id="L123">        log.info(&quot;根据邮箱查询用户：{}&quot;, email);</span>
+        
+<span class="fc" id="L125">        LambdaQueryWrapper&lt;User&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L126">        queryWrapper.eq(User::getEmail, email);</span>
+        
+<span class="fc" id="L128">        User user = userMapper.selectOne(queryWrapper);</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L130">            throw new RuntimeException(messageSource.getMessage(&quot;user.not.exist&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+        
+<span class="fc" id="L133">        return convertToResponse(user);</span>
+    }
+
+    @Override
+    public Page&lt;UserResponse&gt; getUserPage(int pageNum, int pageSize) {
+<span class="fc" id="L138">        log.info(&quot;分页查询用户，页码：{}，页大小：{}&quot;, pageNum, pageSize);</span>
+        
+<span class="fc" id="L140">        Page&lt;User&gt; page = new Page&lt;&gt;(pageNum, pageSize);</span>
+<span class="fc" id="L141">        Page&lt;User&gt; userPage = userMapper.selectPage(page, null);</span>
+        
+        // 转换为响应对象
+<span class="fc" id="L144">        Page&lt;UserResponse&gt; responsePage = new Page&lt;&gt;();</span>
+<span class="fc" id="L145">        BeanUtils.copyProperties(userPage, responsePage);</span>
+<span class="fc" id="L146">        responsePage.setRecords(userPage.getRecords().stream()</span>
+<span class="fc" id="L147">                .map(this::convertToResponse)</span>
+<span class="fc" id="L148">                .collect(java.util.stream.Collectors.toList()));</span>
+        
+<span class="fc" id="L150">        return responsePage;</span>
+    }
+
+    @Override
+    public UserResponse updateUser(String userId, UserRegisterRequest request) {
+<span class="fc" id="L155">        log.info(&quot;更新用户信息，用户ID：{}&quot;, userId);</span>
+<span class="fc" id="L156">        LambdaQueryWrapper&lt;User&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L157">        queryWrapper.eq(User::getUserId, userId);</span>
+<span class="fc" id="L158">        User user = userMapper.selectOne(queryWrapper);</span>
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L160">            throw new RuntimeException(messageSource.getMessage(&quot;user.not.exist&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+        
+        // 更新用户信息
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        if (request.getRealName() != null) {</span>
+<span class="nc" id="L165">            user.setRealName(request.getRealName());</span>
+        }
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">        if (request.getPhone() != null) {</span>
+<span class="fc" id="L168">            user.setPhone(request.getPhone());</span>
+        }
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">        if (request.getEmail() != null) {</span>
+<span class="fc" id="L171">            user.setEmail(request.getEmail());</span>
+        }
+<span class="fc" id="L173">        user.setUpdateTime(LocalDateTime.now());</span>
+        
+<span class="fc" id="L175">        userMapper.updateById(user);</span>
+        
+<span class="fc" id="L177">        log.info(&quot;用户信息更新成功，用户ID：{}&quot;, userId);</span>
+        
+<span class="fc" id="L179">        return convertToResponse(user);</span>
+    }
+
+    @Override
+    public boolean deleteUser(String userId) {
+<span class="fc" id="L184">        log.info(&quot;删除用户，用户ID：{}&quot;, userId);</span>
+<span class="fc" id="L185">        LambdaQueryWrapper&lt;User&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L186">        queryWrapper.eq(User::getUserId, userId);</span>
+<span class="fc" id="L187">        User user = userMapper.selectOne(queryWrapper);</span>
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L189">            throw new RuntimeException(&quot;用户不存在&quot;);</span>
+        }
+        
+<span class="fc" id="L192">        int result = userMapper.deleteById(user.getId());</span>
+        
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">        log.info(&quot;用户删除结果：{}&quot;, result &gt; 0 ? &quot;成功&quot; : &quot;失败&quot;);</span>
+        
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">        return result &gt; 0;</span>
+    }
+
+    @Override
+    public boolean freezeUser(String userId) {
+<span class="fc" id="L201">        log.info(&quot;冻结用户，用户ID：{}&quot;, userId);</span>
+<span class="fc" id="L202">        LambdaQueryWrapper&lt;User&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L203">        queryWrapper.eq(User::getUserId, userId);</span>
+<span class="fc" id="L204">        User user = userMapper.selectOne(queryWrapper);</span>
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L206">            throw new RuntimeException(&quot;用户不存在&quot;);</span>
+        }
+        
+<span class="fc" id="L209">        user.setStatus(CommonConstants.STATUS_FROZEN);</span>
+<span class="fc" id="L210">        user.setUpdateTime(LocalDateTime.now());</span>
+        
+<span class="fc" id="L212">        int result = userMapper.updateById(user);</span>
+        
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">        log.info(&quot;用户冻结结果：{}&quot;, result &gt; 0 ? &quot;成功&quot; : &quot;失败&quot;);</span>
+        
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">        return result &gt; 0;</span>
+    }
+
+    @Override
+    public boolean unfreezeUser(String userId) {
+<span class="fc" id="L221">        log.info(&quot;解冻用户，用户ID：{}&quot;, userId);</span>
+<span class="fc" id="L222">        LambdaQueryWrapper&lt;User&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L223">        queryWrapper.eq(User::getUserId, userId);</span>
+<span class="fc" id="L224">        User user = userMapper.selectOne(queryWrapper);</span>
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L226">            throw new RuntimeException(&quot;用户不存在&quot;);</span>
+        }
+        
+<span class="fc" id="L229">        user.setStatus(CommonConstants.STATUS_ACTIVE);</span>
+<span class="fc" id="L230">        user.setUpdateTime(LocalDateTime.now());</span>
+        
+<span class="fc" id="L232">        int result = userMapper.updateById(user);</span>
+        
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">        log.info(&quot;用户解冻结果：{}&quot;, result &gt; 0 ? &quot;成功&quot; : &quot;失败&quot;);</span>
+        
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        return result &gt; 0;</span>
+    }
+
+    @Override
+    public boolean isUsernameExists(String username) {
+<span class="fc" id="L241">        LambdaQueryWrapper&lt;User&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L242">        queryWrapper.eq(User::getUsername, username);</span>
+        
+<span class="fc bfc" id="L244" title="All 2 branches covered.">        return userMapper.selectCount(queryWrapper) &gt; 0;</span>
+    }
+
+    @Override
+    public boolean isPhoneExists(String phone) {
+<span class="pc bpc" id="L249" title="2 of 4 branches missed.">        if (phone == null || phone.trim().isEmpty()) {</span>
+<span class="nc" id="L250">            return false;</span>
+        }
+<span class="fc" id="L252">        LambdaQueryWrapper&lt;User&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L253">        queryWrapper.eq(User::getPhone, phone);</span>
+        
+<span class="fc bfc" id="L255" title="All 2 branches covered.">        return userMapper.selectCount(queryWrapper) &gt; 0;</span>
+    }
+
+    @Override
+    public boolean isEmailExists(String email) {
+<span class="pc bpc" id="L260" title="2 of 4 branches missed.">        if (email == null || email.trim().isEmpty()) {</span>
+<span class="nc" id="L261">            return false;</span>
+        }
+<span class="fc" id="L263">        LambdaQueryWrapper&lt;User&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L264">        queryWrapper.eq(User::getEmail, email);</span>
+        
+<span class="fc bfc" id="L266" title="All 2 branches covered.">        return userMapper.selectCount(queryWrapper) &gt; 0;</span>
+    }
+
+    @Override
+    public boolean validatePassword(String userId, String password) {
+<span class="fc" id="L271">        LambdaQueryWrapper&lt;User&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L272">        queryWrapper.eq(User::getUserId, userId);</span>
+<span class="fc" id="L273">        User user = userMapper.selectOne(queryWrapper);</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L275">            return false;</span>
+        }
+        
+<span class="fc" id="L278">        String encryptedPassword = DigestUtils.md5DigestAsHex(password.getBytes());</span>
+<span class="fc" id="L279">        return encryptedPassword.equals(user.getPassword());</span>
+    }
+
+    @Override
+    public boolean changePassword(String userId, String oldPassword, String newPassword) {
+<span class="fc" id="L284">        log.info(&quot;修改密码，用户ID：{}&quot;, userId);</span>
+        
+        // 验证旧密码
+<span class="fc bfc" id="L287" title="All 2 branches covered.">        if (!validatePassword(userId, oldPassword)) {</span>
+<span class="fc" id="L288">            throw new RuntimeException(messageSource.getMessage(&quot;user.password.old.incorrect&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+<span class="fc" id="L290">        LambdaQueryWrapper&lt;User&gt; queryWrapper = new LambdaQueryWrapper&lt;&gt;();</span>
+<span class="fc" id="L291">        queryWrapper.eq(User::getUserId, userId);</span>
+<span class="fc" id="L292">        User user = userMapper.selectOne(queryWrapper);</span>
+<span class="pc bpc" id="L293" title="1 of 2 branches missed.">        if (user == null) {</span>
+<span class="nc" id="L294">            throw new RuntimeException(messageSource.getMessage(&quot;user.not.exist&quot;, null, LocaleContextHolder.getLocale()));</span>
+        }
+        
+        // 更新密码
+<span class="fc" id="L298">        user.setPassword(DigestUtils.md5DigestAsHex(newPassword.getBytes()));</span>
+<span class="fc" id="L299">        user.setUpdateTime(LocalDateTime.now());</span>
+        
+<span class="fc" id="L301">        int result = userMapper.updateById(user);</span>
+        
+<span class="pc bpc" id="L303" title="1 of 2 branches missed.">        log.info(&quot;密码修改结果：{}&quot;, result &gt; 0 ? &quot;成功&quot; : &quot;失败&quot;);</span>
+        
+<span class="pc bpc" id="L305" title="1 of 2 branches missed.">        return result &gt; 0;</span>
+    }
+
+    /**
+     * 转换为响应对象
+     */
+    private UserResponse convertToResponse(User user) {
+<span class="fc" id="L312">        UserResponse response = new UserResponse();</span>
+<span class="fc" id="L313">        BeanUtils.copyProperties(user, response);</span>
+        // 不返回密码，UserResponse中没有password字段
+<span class="fc" id="L315">        return response;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

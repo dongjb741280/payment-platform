@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaymentServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Payment Engine Service</a> &gt; <a href="index.source.html" class="el_package">com.payment.engine.service.impl</a> &gt; <span class="el_source">PaymentServiceImpl.java</span></div><h1>PaymentServiceImpl.java</h1><pre class="source lang-java linenums">package com.payment.engine.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.payment.common.constant.CommonConstants;
+import com.payment.common.util.BusinessIdGenerator;
+import com.payment.engine.domain.PaymentStatus;
+import com.payment.engine.entity.PaymentDetail;
+import com.payment.engine.entity.PaymentMain;
+import com.payment.engine.mapper.PaymentDetailMapper;
+import com.payment.engine.mapper.PaymentMainMapper;
+import com.payment.engine.mapper.TradeOrderLiteMapper;
+import com.payment.engine.entity.TradeOrderLite;
+import com.payment.engine.service.PaymentService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Service
+<span class="fc" id="L22">public class PaymentServiceImpl implements PaymentService {</span>
+
+    @Resource
+    private PaymentMainMapper paymentMainMapper;
+    @Resource
+    private PaymentDetailMapper paymentDetailMapper;
+    @Resource
+    private BusinessIdGenerator businessIdGenerator;
+    @Resource
+    private TradeOrderLiteMapper tradeOrderLiteMapper;
+
+    @Override
+    public String accept(String tradeOrderNo, String paymentMethod) {
+        // 查询交易订单，获取金额币种
+<span class="fc" id="L36">        TradeOrderLite order = tradeOrderLiteMapper.selectOne(new LambdaQueryWrapper&lt;TradeOrderLite&gt;()</span>
+<span class="fc" id="L37">                .eq(TradeOrderLite::getTradeOrderNo, tradeOrderNo));</span>
+        // 幂等：如果已有主单则复用
+<span class="fc" id="L39">        PaymentMain main = paymentMainMapper.selectOne(new LambdaQueryWrapper&lt;PaymentMain&gt;()</span>
+<span class="fc" id="L40">                .eq(PaymentMain::getTradeOrderNo, tradeOrderNo));</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (main == null) {</span>
+<span class="fc" id="L42">            main = new PaymentMain();</span>
+<span class="fc" id="L43">            main.setPaymentMainNo(businessIdGenerator.generatePaymentNo());</span>
+<span class="fc" id="L44">            main.setTradeOrderNo(tradeOrderNo);</span>
+<span class="pc bpc" id="L45" title="2 of 4 branches missed.">            main.setAmount(order != null &amp;&amp; order.getAmount() != null ? order.getAmount() : new BigDecimal(&quot;0.00&quot;));</span>
+<span class="pc bpc" id="L46" title="2 of 4 branches missed.">            main.setCurrency(order != null &amp;&amp; order.getCurrency() != null ? order.getCurrency() : CommonConstants.CURRENCY_CNY);</span>
+<span class="fc" id="L47">            main.setStatus(PaymentStatus.INIT.getCode());</span>
+<span class="fc" id="L48">            main.setCreateTime(LocalDateTime.now());</span>
+<span class="fc" id="L49">            main.setUpdateTime(LocalDateTime.now());</span>
+<span class="fc" id="L50">            paymentMainMapper.insert(main);</span>
+        }
+
+<span class="fc" id="L53">        PaymentDetail detail = new PaymentDetail();</span>
+<span class="fc" id="L54">        detail.setPaymentDetailNo(businessIdGenerator.generatePaymentNo());</span>
+<span class="fc" id="L55">        detail.setPaymentMainNo(main.getPaymentMainNo());</span>
+<span class="fc" id="L56">        detail.setPaymentMethod(paymentMethod);</span>
+<span class="fc" id="L57">        detail.setAmount(main.getAmount());</span>
+<span class="fc" id="L58">        detail.setCurrency(main.getCurrency());</span>
+<span class="fc" id="L59">        detail.setStatus(PaymentStatus.PAYING.getCode());</span>
+<span class="fc" id="L60">        detail.setCreateTime(LocalDateTime.now());</span>
+<span class="fc" id="L61">        detail.setUpdateTime(LocalDateTime.now());</span>
+<span class="fc" id="L62">        paymentDetailMapper.insert(detail);</span>
+
+<span class="fc" id="L64">        paymentMainMapper.update(null, new LambdaUpdateWrapper&lt;PaymentMain&gt;()</span>
+<span class="fc" id="L65">                .eq(PaymentMain::getPaymentMainNo, main.getPaymentMainNo())</span>
+<span class="fc" id="L66">                .set(PaymentMain::getStatus, PaymentStatus.PAYING.getCode())</span>
+<span class="fc" id="L67">                .set(PaymentMain::getUpdateTime, LocalDateTime.now()));</span>
+
+        // 更新交易订单状态为支付中
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (order != null) {</span>
+<span class="fc" id="L71">            tradeOrderLiteMapper.update(null, new LambdaUpdateWrapper&lt;TradeOrderLite&gt;()</span>
+<span class="fc" id="L72">                    .eq(TradeOrderLite::getTradeOrderNo, tradeOrderNo)</span>
+<span class="fc" id="L73">                    .set(TradeOrderLite::getStatus, CommonConstants.TRADE_STATUS_PAYING));</span>
+        }
+
+<span class="fc" id="L76">        return main.getPaymentMainNo();</span>
+    }
+
+    @Override
+    public String result(String tradeOrderNo) {
+<span class="fc" id="L81">        PaymentMain main = paymentMainMapper.selectOne(new LambdaQueryWrapper&lt;PaymentMain&gt;()</span>
+<span class="fc" id="L82">                .eq(PaymentMain::getTradeOrderNo, tradeOrderNo));</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        return main == null ? null : main.getStatus();</span>
+    }
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

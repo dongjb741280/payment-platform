@@ -1,0 +1,10 @@
+com/payment/acquiring/dto/TradeOrderCreateRequest.class
+com/payment/acquiring/controller/TradeOrderController.class
+com/payment/acquiring/PaymentAcquiringApplication.class
+com/payment/acquiring/service/impl/TradeOrderServiceImpl.class
+com/payment/acquiring/mapper/TradeOrderMapper.class
+com/payment/acquiring/entity/TradeOrder.class
+com/payment/acquiring/domain/TradeOrderStatus.class
+com/payment/acquiring/service/TradeOrderService.class
+com/payment/acquiring/controller/HealthController.class
+com/payment/acquiring/task/TradeOrderExpireTask.class
