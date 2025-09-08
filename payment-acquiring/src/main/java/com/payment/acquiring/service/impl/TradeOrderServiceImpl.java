@@ -8,13 +8,14 @@ import com.payment.acquiring.mapper.TradeOrderMapper;
 import com.payment.acquiring.service.TradeOrderService;
 import com.payment.acquiring.domain.TradeOrderStatus;
 import com.payment.common.util.BusinessIdGenerator;
+import com.payment.acquiring.service.CacheService;
+import com.payment.acquiring.util.CacheKeyBuilder;
+import com.payment.acquiring.config.CacheProperties;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import com.payment.common.page.PageResponse;
 
 @Service
@@ -25,6 +26,12 @@ public class TradeOrderServiceImpl implements TradeOrderService {
 
     @Resource
     private BusinessIdGenerator businessIdGenerator;
+    @Resource
+    private CacheService cacheService;
+    @Resource
+    private CacheKeyBuilder cacheKeyBuilder;
+    @Resource
+    private CacheProperties cacheProperties;
 
     @Override
     public TradeOrder createOrder(TradeOrderCreateRequest request) {
@@ -45,9 +52,15 @@ public class TradeOrderServiceImpl implements TradeOrderService {
         order.setStatus(TradeOrderStatus.INIT.getCode());
         order.setNotifyUrl(request.getNotifyUrl());
         order.setReturnUrl(request.getReturnUrl());
+        // 设置默认过期时间：30分钟
+        order.setExpireTime(LocalDateTime.now().plusMinutes(30));
         order.setCreateTime(LocalDateTime.now());
         order.setUpdateTime(LocalDateTime.now());
         tradeOrderMapper.insert(order);
+        if (cacheService != null && cacheKeyBuilder != null && cacheProperties != null) {
+            cacheService.set(cacheKeyBuilder.trade(order.getTradeOrderNo()), order, cacheProperties.getTradeTtlSeconds());
+            cacheService.set(cacheKeyBuilder.tradeByMerchant(order.getMerchantId(), order.getMerchantOrderNo()), order, cacheProperties.getTradeTtlSeconds());
+        }
         return order;
     }
 
@@ -85,6 +98,55 @@ public class TradeOrderServiceImpl implements TradeOrderService {
                 .orderByDesc(TradeOrder::getCreateTime)
                 .last("limit " + offset + "," + pageSize));
         return PageResponse.of(total, pageNum, pageSize, records);
+    }
+
+    // 订单状态更新：支付中 -> 成功/失败
+    @Override
+    public boolean markPaying(String tradeOrderNo) {
+        boolean ok = tradeOrderMapper.update(null, new LambdaUpdateWrapper<TradeOrder>()
+                .eq(TradeOrder::getTradeOrderNo, tradeOrderNo)
+                .eq(TradeOrder::getStatus, TradeOrderStatus.INIT.getCode())
+                .set(TradeOrder::getStatus, TradeOrderStatus.PAYING.getCode())
+                .set(TradeOrder::getUpdateTime, LocalDateTime.now())) > 0;
+        if (ok && cacheService != null && cacheKeyBuilder != null && cacheProperties != null) {
+            TradeOrder order = getByTradeOrderNo(tradeOrderNo);
+            if (order != null) {
+                cacheService.set(cacheKeyBuilder.trade(tradeOrderNo), order, cacheProperties.getTradeTtlSeconds());
+            }
+        }
+        return ok;
+    }
+
+    @Override
+    public boolean markSuccess(String tradeOrderNo) {
+        boolean ok = tradeOrderMapper.update(null, new LambdaUpdateWrapper<TradeOrder>()
+                .eq(TradeOrder::getTradeOrderNo, tradeOrderNo)
+                .in(TradeOrder::getStatus, TradeOrderStatus.INIT.getCode(), TradeOrderStatus.PAYING.getCode())
+                .set(TradeOrder::getStatus, TradeOrderStatus.SUCCESS.getCode())
+                .set(TradeOrder::getUpdateTime, LocalDateTime.now())) > 0;
+        if (ok && cacheService != null && cacheKeyBuilder != null && cacheProperties != null) {
+            TradeOrder order = getByTradeOrderNo(tradeOrderNo);
+            if (order != null) {
+                cacheService.set(cacheKeyBuilder.trade(tradeOrderNo), order, cacheProperties.getTradeTtlSeconds());
+            }
+        }
+        return ok;
+    }
+
+    @Override
+    public boolean markFailed(String tradeOrderNo) {
+        boolean ok = tradeOrderMapper.update(null, new LambdaUpdateWrapper<TradeOrder>()
+                .eq(TradeOrder::getTradeOrderNo, tradeOrderNo)
+                .in(TradeOrder::getStatus, TradeOrderStatus.INIT.getCode(), TradeOrderStatus.PAYING.getCode())
+                .set(TradeOrder::getStatus, TradeOrderStatus.FAILED.getCode())
+                .set(TradeOrder::getUpdateTime, LocalDateTime.now())) > 0;
+        if (ok && cacheService != null && cacheKeyBuilder != null && cacheProperties != null) {
+            TradeOrder order = getByTradeOrderNo(tradeOrderNo);
+            if (order != null) {
+                cacheService.set(cacheKeyBuilder.trade(tradeOrderNo), order, cacheProperties.getTradeTtlSeconds());
+            }
+        }
+        return ok;
     }
 }
 

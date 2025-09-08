@@ -1,5 +1,9 @@
 server:
   port: 8086
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,text/css,application/javascript
+    min-response-size: 1024
 
 spring:
   application:
@@ -65,6 +69,13 @@ spring:
     port: 6379
   messages:
     basename: messages
+
+cache:
+  prefix: "cache:"
+  trade-lite-ttl-seconds: 300
+  payment-status-success-ttl-seconds: 300
+  payment-status-fail-ttl-seconds: 60
+  negative-ttl-seconds: 30
 
 logging:
   level:

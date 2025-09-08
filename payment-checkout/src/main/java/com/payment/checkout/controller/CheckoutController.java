@@ -14,9 +14,13 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.*;
+import com.payment.checkout.service.CacheService;
+import com.payment.checkout.util.CacheKeyBuilder;
+import com.payment.checkout.config.CacheProperties;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "收银台管理")
 @RestController
@@ -37,11 +41,23 @@ public class CheckoutController {
     private AcquiringClient acquiringClient;
     @Resource
     private MessageSource messageSource;
+    @Resource
+    private CacheService cacheService;
+    @Resource
+    private CacheKeyBuilder cacheKeyBuilder;
+    @Resource
+    private CacheProperties cacheProperties;
 
     @ApiOperation(value = "咨询支付方式", notes = "获取指定交易单可用的支付方式")
     @GetMapping("/consult")
     public Result<List<PaymentMethodDTO>> consult(@ApiParam(value = "交易单号", required = true) @RequestParam String tradeOrderNo) {
-        List<PaymentMethodDTO> methods = paymentMethodService.consult(tradeOrderNo);
+        String key = cacheKeyBuilder.consult(tradeOrderNo);
+        @SuppressWarnings("unchecked")
+        List<PaymentMethodDTO> methods = (List<PaymentMethodDTO>) cacheService.get(key, List.class);
+        if (methods == null) {
+            methods = paymentMethodService.consult(tradeOrderNo);
+            cacheService.set(key, methods, cacheProperties.getConsultTtlSeconds());
+        }
         return Result.success(methods);
     }
 
@@ -77,7 +93,14 @@ public class CheckoutController {
     @ApiOperation(value = "轮询支付结果", notes = "轮询指定交易单的支付结果")
     @GetMapping("/poll")
     public Result<String> poll(@ApiParam(value = "交易单号", required = true) @RequestParam String tradeOrderNo) {
-        String result = engineClient.result(tradeOrderNo);
+        String key = cacheKeyBuilder.paymentStatus(tradeOrderNo);
+        String result = cacheService.get(key, String.class);
+        if (result == null) {
+            result = engineClient.result(tradeOrderNo);
+            if (result != null) {
+                cacheService.set(key, result, cacheProperties.getPaymentStatusTtlSeconds());
+            }
+        }
         return Result.success(result);
     }
 
@@ -93,7 +116,16 @@ public class CheckoutController {
     @GetMapping("/order/{tradeOrderNo}")
     public Result<?> getOrderDetail(@ApiParam(value = "交易单号", required = true) @PathVariable String tradeOrderNo,
                                     @ApiParam(value = "商户ID", required = false) @RequestParam(required = false) String merchantId) {
-        var order = acquiringClient.getOrderByTradeOrderNo(tradeOrderNo);
+        String key = cacheKeyBuilder.order(tradeOrderNo);
+        Map<String, Object> order = cacheService.get(key, Map.class);
+        if (order == null) {
+            order = acquiringClient.getOrderByTradeOrderNo(tradeOrderNo);
+            if (order != null) {
+                cacheService.set(key, order, cacheProperties.getOrderTtlSeconds());
+            } else {
+                cacheService.set(key, new java.util.HashMap<>(), cacheProperties.getNegativeTtlSeconds());
+            }
+        }
         if (order == null) {
             return Result.businessError(messageSource.getMessage("order.not.exist", null, LocaleContextHolder.getLocale()));
         }

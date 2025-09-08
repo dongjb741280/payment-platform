@@ -3,6 +3,9 @@ package com.payment.acquiring.controller;
 import com.payment.acquiring.dto.TradeOrderCreateRequest;
 import com.payment.acquiring.entity.TradeOrder;
 import com.payment.acquiring.service.TradeOrderService;
+import com.payment.acquiring.service.CacheService;
+import com.payment.acquiring.util.CacheKeyBuilder;
+import com.payment.acquiring.config.CacheProperties;
 import com.payment.common.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +26,12 @@ public class TradeOrderController {
     private TradeOrderService tradeOrderService;
     @Resource
     private MessageSource messageSource;
+    @Resource
+    private CacheService cacheService;
+    @Resource
+    private CacheKeyBuilder cacheKeyBuilder;
+    @Resource
+    private CacheProperties cacheProperties;
 
     @ApiOperation(value = "创建交易订单", notes = "创建新的交易订单")
     @PostMapping("/create")
@@ -34,7 +43,21 @@ public class TradeOrderController {
     @ApiOperation(value = "根据交易单号获取订单", notes = "通过交易单号获取订单详细信息")
     @GetMapping("/{tradeOrderNo}")
     public Result<TradeOrder> get(@ApiParam(value = "交易单号", required = true) @PathVariable String tradeOrderNo) {
-        TradeOrder order = tradeOrderService.getByTradeOrderNo(tradeOrderNo);
+        TradeOrder order;
+        if (cacheService == null || cacheKeyBuilder == null || cacheProperties == null) {
+            order = tradeOrderService.getByTradeOrderNo(tradeOrderNo);
+        } else {
+            String key = cacheKeyBuilder.trade(tradeOrderNo);
+            order = cacheService.get(key, TradeOrder.class);
+            if (order == null) {
+                order = tradeOrderService.getByTradeOrderNo(tradeOrderNo);
+                if (order != null) {
+                    cacheService.set(key, order, cacheProperties.getTradeTtlSeconds());
+                } else {
+                    cacheService.set(key, new TradeOrder(), cacheProperties.getNegativeTtlSeconds());
+                }
+            }
+        }
         if (order == null) {
             return Result.businessError(messageSource.getMessage("order.not.exist", null, LocaleContextHolder.getLocale()));
         }
@@ -45,7 +68,21 @@ public class TradeOrderController {
     @GetMapping("/merchant")
     public Result<TradeOrder> getByMerchant(@ApiParam(value = "商户ID", required = true) @RequestParam String merchantId,
                                             @ApiParam(value = "商户订单号", required = true) @RequestParam String merchantOrderNo) {
-        TradeOrder order = tradeOrderService.getByMerchantPair(merchantId, merchantOrderNo);
+        TradeOrder order;
+        if (cacheService == null || cacheKeyBuilder == null || cacheProperties == null) {
+            order = tradeOrderService.getByMerchantPair(merchantId, merchantOrderNo);
+        } else {
+            String key = cacheKeyBuilder.tradeByMerchant(merchantId, merchantOrderNo);
+            order = cacheService.get(key, TradeOrder.class);
+            if (order == null) {
+                order = tradeOrderService.getByMerchantPair(merchantId, merchantOrderNo);
+                if (order != null) {
+                    cacheService.set(key, order, cacheProperties.getTradeTtlSeconds());
+                } else {
+                    cacheService.set(key, new TradeOrder(), cacheProperties.getNegativeTtlSeconds());
+                }
+            }
+        }
         return Result.success(order);
     }
 
@@ -65,6 +102,36 @@ public class TradeOrderController {
                                     @ApiParam(value = "页码", required = true) @RequestParam int pageNum,
                                     @ApiParam(value = "每页大小", required = true) @RequestParam int pageSize) {
         return Result.success(tradeOrderService.pageByMerchant(merchantId, pageNum, pageSize));
+    }
+
+    @ApiOperation(value = "设置订单为支付中", notes = "将订单从 INIT 置为 PAYING")
+    @PostMapping("/{tradeOrderNo}/paying")
+    public Result<Boolean> markPaying(@ApiParam(value = "交易单号", required = true) @PathVariable String tradeOrderNo) {
+        boolean ok = tradeOrderService.markPaying(tradeOrderNo);
+        if (!ok) {
+            return Result.businessError(messageSource.getMessage("order.status.invalid", null, LocaleContextHolder.getLocale()));
+        }
+        return Result.success(ok);
+    }
+
+    @ApiOperation(value = "设置订单为成功", notes = "将订单从 INIT/PAYING 置为 SUCCESS")
+    @PostMapping("/{tradeOrderNo}/success")
+    public Result<Boolean> markSuccess(@ApiParam(value = "交易单号", required = true) @PathVariable String tradeOrderNo) {
+        boolean ok = tradeOrderService.markSuccess(tradeOrderNo);
+        if (!ok) {
+            return Result.businessError(messageSource.getMessage("order.status.invalid", null, LocaleContextHolder.getLocale()));
+        }
+        return Result.success(ok);
+    }
+
+    @ApiOperation(value = "设置订单为失败", notes = "将订单从 INIT/PAYING 置为 FAILED")
+    @PostMapping("/{tradeOrderNo}/failed")
+    public Result<Boolean> markFailed(@ApiParam(value = "交易单号", required = true) @PathVariable String tradeOrderNo) {
+        boolean ok = tradeOrderService.markFailed(tradeOrderNo);
+        if (!ok) {
+            return Result.businessError(messageSource.getMessage("order.status.invalid", null, LocaleContextHolder.getLocale()));
+        }
+        return Result.success(ok);
     }
 }
 

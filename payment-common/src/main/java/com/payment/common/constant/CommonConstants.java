@@ -155,6 +155,7 @@ public class CommonConstants {
     public static final String PAYMENT_METHOD_UNIONPAY = "UNIONPAY";
     public static final String PAYMENT_METHOD_BALANCE = "BALANCE";
     public static final String PAYMENT_METHOD_BANK_CARD = "BANK_CARD";
+    public static final String PAYMENT_METHOD_QRCODE = "QRCODE";
 
     /**
      * 渠道常量

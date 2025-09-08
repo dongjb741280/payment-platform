@@ -11,4 +11,9 @@ public interface TradeOrderService {
     TradeOrder getByMerchantPair(String merchantId, String merchantOrderNo);
     boolean closeOrder(String tradeOrderNo);
     PageResponse<TradeOrder> pageByMerchant(String merchantId, int pageNum, int pageSize);
+
+    // 状态更新
+    boolean markPaying(String tradeOrderNo);
+    boolean markSuccess(String tradeOrderNo);
+    boolean markFailed(String tradeOrderNo);
 }
