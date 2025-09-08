@@ -1,0 +1,47 @@
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+out/
+
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+
+# Logs and runtime data
+logs/
+*.log
+*.pid
+*.tmp
+
+# Test / coverage
+coverage/
+.coverage
+*.exec
+jacoco.exec
+
+# Python cache (for helper scripts)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual envs
+.env
+.venv
+venv/
+env/
+
+# Editor swap files
+*.swp
+*.swo
+
