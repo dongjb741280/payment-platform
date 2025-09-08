@@ -230,7 +230,7 @@ mvn clean package -DskipTests
 {
   "code": "0000",
   "message": "操作成功",
-  "data": { ... },
+  "data": { },
   "requestId": "",
   "timestamp": 1710000000000
 }
