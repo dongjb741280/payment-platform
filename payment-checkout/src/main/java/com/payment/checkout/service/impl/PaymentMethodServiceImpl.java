@@ -5,6 +5,9 @@ import com.payment.checkout.dto.FormFieldDTO;
 import com.payment.checkout.client.AcquiringClient;
 import com.payment.checkout.service.RiskService;
 import com.payment.checkout.service.PaymentMethodService;
+import com.payment.checkout.service.CacheService;
+import com.payment.checkout.util.CacheKeyBuilder;
+import com.payment.checkout.config.CacheProperties;
 import com.payment.common.constant.CommonConstants;
 import org.springframework.stereotype.Service;
 import org.springframework.context.MessageSource;
@@ -23,6 +26,12 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     private AcquiringClient acquiringClient;
 
     private MessageSource messageSource;
+    @javax.annotation.Resource
+    private CacheService cacheService;
+    @javax.annotation.Resource
+    private CacheKeyBuilder cacheKeyBuilder;
+    @javax.annotation.Resource
+    private CacheProperties cacheProperties;
 
     // 为测试构造兼容保留
     public PaymentMethodServiceImpl() {}
@@ -32,6 +41,14 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     }
     @Override
     public List<PaymentMethodDTO> consult(String tradeOrderNo) {
+        // optional cache hit
+        if (cacheService != null) {
+            String key = cacheKeyBuilder != null ? cacheKeyBuilder.consult(tradeOrderNo) : ("cache:chk:consult:" + tradeOrderNo);
+            List cached = cacheService.get(key, List.class);
+            if (cached != null) {
+                return cached;
+            }
+        }
         // 简化演示：静态方法列表 + 元信息 + 排序
         List<PaymentMethodDTO> list = new ArrayList<>();
         PaymentMethodDTO balance = new PaymentMethodDTO(CommonConstants.PAYMENT_METHOD_BALANCE, getMsg("payment.method.balance", "余额支付"), 10, true);
@@ -87,6 +104,11 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
             }
         }
         list.sort(Comparator.comparingInt(PaymentMethodDTO::getSort));
+        if (cacheService != null) {
+            String key = cacheKeyBuilder != null ? cacheKeyBuilder.consult(tradeOrderNo) : ("cache:chk:consult:" + tradeOrderNo);
+            long ttl = cacheProperties != null ? cacheProperties.getConsultTtlSeconds() : 120;
+            cacheService.set(key, list, ttl);
+        }
         return list;
     }
 
