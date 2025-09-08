@@ -1,8 +1,0 @@
-com/payment/user/service/impl/UserServiceImpl.class
-com/payment/user/dto/UserResponse.class
-com/payment/user/dto/UserRegisterRequest.class
-com/payment/user/entity/User.class
-com/payment/user/PaymentUserApplication.class
-com/payment/user/mapper/UserMapper.class
-com/payment/user/service/UserService.class
-com/payment/user/controller/UserController.class

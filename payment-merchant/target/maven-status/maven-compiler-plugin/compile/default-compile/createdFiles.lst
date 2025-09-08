@@ -1,9 +1,0 @@
-com/payment/merchant/mapper/MerchantMapper.class
-com/payment/merchant/dto/MerchantRegisterRequest.class
-com/payment/merchant/dto/MerchantResponse.class
-com/payment/merchant/service/impl/MerchantServiceImpl.class
-com/payment/merchant/dto/MerchantUpdateRequest.class
-com/payment/merchant/controller/MerchantController.class
-com/payment/merchant/service/MerchantService.class
-com/payment/merchant/PaymentMerchantApplication.class
-com/payment/merchant/entity/Merchant.class

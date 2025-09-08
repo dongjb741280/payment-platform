@@ -1,8 +1,0 @@
-GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-Payment Merchant Service,com.payment.merchant.entity,Merchant,562,115,134,0,1,17,71,33,4,33
-Payment Merchant Service,com.payment.merchant.controller,MerchantController,40,120,0,0,12,32,0,9,0,9
-Payment Merchant Service,com.payment.merchant.service.impl,MerchantServiceImpl,66,350,6,12,6,80,6,16,0,13
-Payment Merchant Service,com.payment.merchant,PaymentMerchantApplication,5,3,0,0,2,1,1,1,1,1
-Payment Merchant Service,com.payment.merchant.dto,MerchantUpdateRequest,282,73,70,0,0,9,39,17,4,17
-Payment Merchant Service,com.payment.merchant.dto,MerchantRegisterRequest,278,77,70,0,0,9,38,18,3,18
-Payment Merchant Service,com.payment.merchant.dto,MerchantResponse,402,115,102,0,0,13,54,26,3,26

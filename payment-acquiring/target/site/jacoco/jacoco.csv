@@ -1,9 +1,0 @@
-GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-Payment Acquiring Service,com.payment.acquiring.dto,TradeOrderCreateRequest,330,69,78,0,0,10,43,19,4,19
-Payment Acquiring Service,com.payment.acquiring.service.impl,TradeOrderServiceImpl,1,190,1,3,0,38,1,7,0,6
-Payment Acquiring Service,com.payment.acquiring.domain,TradeOrderStatus,3,57,0,0,1,11,1,3,1,3
-Payment Acquiring Service,com.payment.acquiring,PaymentAcquiringApplication,8,0,0,0,3,0,2,0,2,0
-Payment Acquiring Service,com.payment.acquiring.controller,HealthController,21,0,0,0,6,0,3,0,3,0
-Payment Acquiring Service,com.payment.acquiring.controller,TradeOrderController,39,26,3,1,8,6,5,3,3,3
-Payment Acquiring Service,com.payment.acquiring.task,TradeOrderExpireTask,40,0,0,0,7,0,2,0,2,0
-Payment Acquiring Service,com.payment.acquiring.entity,TradeOrder,567,72,125,1,11,6,79,19,16,19

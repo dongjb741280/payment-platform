@@ -1,9 +1,0 @@
-/Users/dongjb/IdeaProjects/lean/pay/phase1/payment-platform/payment-merchant/src/main/java/com/payment/merchant/controller/MerchantController.java
-/Users/dongjb/IdeaProjects/lean/pay/phase1/payment-platform/payment-merchant/src/main/java/com/payment/merchant/PaymentMerchantApplication.java
-/Users/dongjb/IdeaProjects/lean/pay/phase1/payment-platform/payment-merchant/src/main/java/com/payment/merchant/service/MerchantService.java
-/Users/dongjb/IdeaProjects/lean/pay/phase1/payment-platform/payment-merchant/src/main/java/com/payment/merchant/entity/Merchant.java
-/Users/dongjb/IdeaProjects/lean/pay/phase1/payment-platform/payment-merchant/src/main/java/com/payment/merchant/dto/MerchantUpdateRequest.java
-/Users/dongjb/IdeaProjects/lean/pay/phase1/payment-platform/payment-merchant/src/main/java/com/payment/merchant/mapper/MerchantMapper.java
-/Users/dongjb/IdeaProjects/lean/pay/phase1/payment-platform/payment-merchant/src/main/java/com/payment/merchant/dto/MerchantResponse.java
-/Users/dongjb/IdeaProjects/lean/pay/phase1/payment-platform/payment-merchant/src/main/java/com/payment/merchant/service/impl/MerchantServiceImpl.java
-/Users/dongjb/IdeaProjects/lean/pay/phase1/payment-platform/payment-merchant/src/main/java/com/payment/merchant/dto/MerchantRegisterRequest.java
