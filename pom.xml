@@ -22,6 +22,9 @@
         <module>payment-acquiring</module>
         <module>payment-checkout</module>
         <module>payment-engine</module>
+        <module>payment-channel</module>
+        <module>payment-message-gateway</module>
+        <module>payment-file-gateway</module>
     </modules>
 
     <properties>

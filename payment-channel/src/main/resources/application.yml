@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: payment-channel-gateway
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  port: 8087
+
+logging:
+  level:
+    com.payment.channel: DEBUG
+
+# 渠道配置示例
+payment:
+  channel:
+    configs:
+      mock:
+        channelCode: mock
+        channelName: Mock Channel
+        enabled: true
+        endpoint: https://mock.pay
+        merchantId: demo
+        appId: demo
+        publicKey: dummy
+        privateKey: dummy
+        notifyUrl: http://localhost:8082/notify/mock
+        returnUrl: http://localhost:8082/return/mock
+      alipay:
+        channelCode: alipay
+        channelName: Alipay
+        enabled: true
+        endpoint: https://openapi.alipay.com/gateway.do
+        merchantId: your_merchant_id
+        appId: your_app_id
+        publicKey: your_alipay_public_key
+        privateKey: your_merchant_private_key
+        notifyUrl: http://localhost:8082/notify/alipay
+        returnUrl: http://localhost:8082/return/alipay
+      wechatpay:
+        channelCode: wechatpay
+        channelName: WeChat Pay
+        enabled: true
+        endpoint: https://api.mch.weixin.qq.com
+        merchantId: your_mch_id
+        appId: your_app_id
+        publicKey: your_wechat_platform_key
+        privateKey: your_merchant_private_key
+        notifyUrl: http://localhost:8082/notify/wechat
+        returnUrl: http://localhost:8082/return/wechat
+      unionpay:
+        channelCode: unionpay
+        channelName: UnionPay
+        enabled: true
+        endpoint: https://gateway.95516.com/gateway/api
+        merchantId: your_mer_id
+        appId: ""
+        publicKey: your_unionpay_public_key
+        privateKey: your_merchant_private_key
+        notifyUrl: http://localhost:8082/notify/unionpay
+        returnUrl: http://localhost:8082/return/unionpay

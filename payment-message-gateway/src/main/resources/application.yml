@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: payment-message-gateway
+  freemarker:
+    template-loader-path: classpath:/templates/
+    suffix: .ftl
+    charset: UTF-8
+    cache: false
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  port: 8088
+
+logging:
+  level:
+    com.payment.message: DEBUG

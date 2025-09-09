@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: payment-file-gateway
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  port: 8089
+
+file:
+  storage:
+    path: /tmp/payment-files
+  max-size: 10MB
+  allowed-types: 
+    - application/vnd.ms-excel
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+    - text/csv
+    - application/xml
+    - text/xml
+    - application/json
+    - application/pdf
+
+logging:
+  level:
+    com.payment.file: DEBUG
